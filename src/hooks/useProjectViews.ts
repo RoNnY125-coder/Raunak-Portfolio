@@ -7,7 +7,7 @@ export function useProjectViews(projectSlug: string) {
   useEffect(() => {
     async function trackAndFetch() {
       // Upsert: increment count or create row
-    if (!supabase) return
+      if (!supabase) return
       const { data } = await supabase.rpc('increment_project_view', {
         slug: projectSlug,
       })

@@ -9,12 +9,13 @@ export default function Admin() {
   const [password, setPassword] = useState('')
 
   useEffect(() => {
+    if (!supabase) return
     supabase.auth.getSession().then(({ data }) => setSession(data.session))
     supabase.auth.onAuthStateChange((_e, s) => setSession(s))
   }, [])
 
   useEffect(() => {
-    if (!session) return
+    if (!supabase || !session) return
     // Fetch contact messages
     supabase.from('contact_messages').select('*').order('created_at', { ascending: false })
       .then(({ data }) => setMessages(data ?? []))
@@ -24,11 +25,26 @@ export default function Admin() {
   }, [session])
 
   const login = async () => {
+    if (!supabase) return
     await supabase.auth.signInWithPassword({ email, password })
   }
 
   const logout = async () => {
+    if (!supabase) return
     await supabase.auth.signOut()
+  }
+
+  if (!supabase) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-background p-6">
+        <div className="card-glass w-full max-w-lg space-y-4 p-8">
+          <h1 className="font-heading text-2xl font-bold">Admin Unavailable</h1>
+          <p className="text-sm text-muted-foreground">
+            Supabase environment variables are missing, so admin features are disabled right now.
+          </p>
+        </div>
+      </div>
+    )
   }
 
   if (!session) {

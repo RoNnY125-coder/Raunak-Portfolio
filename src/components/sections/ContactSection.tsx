@@ -23,10 +23,20 @@ export function ContactSection() {
     e.preventDefault();
     setIsSubmitting(true);
 
+    if (!supabase) {
+      toast({
+        title: 'Contact form unavailable',
+        description: 'Supabase is not configured right now. Please email me directly.',
+        variant: 'destructive',
+      });
+      setIsSubmitting(false);
+      return;
+    }
+
     const form = e.target as HTMLFormElement;
     const formData = new FormData(form);
 
-    const { error } = await supabase!
+    const { error } = await supabase
       .from('contact_messages')
       .insert({
         name: formData.get('name') as string,
