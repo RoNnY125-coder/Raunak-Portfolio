@@ -27,7 +27,7 @@ export function AboutSection() {
 
   return (
     <section id="about" className="relative py-24 lg:pl-20">
-      <div className="container mx-auto px-6">
+      <div className="container mx-auto px-6 max-w-6xl">
         <motion.div
           ref={ref}
           initial={{ opacity: 0, y: 40 }}
