@@ -10,6 +10,7 @@ interface GitHubRepo {
   stargazers_count: number
   language: string | null
   updated_at: string
+  fork?: boolean
 }
 
 export function useGitHubProjects(username: string) {
@@ -21,16 +22,25 @@ export function useGitHubProjects(username: string) {
     async function fetchRepos() {
       try {
         const res = await fetch(
-          `https://api.github.com/users/${username}/repos?sort=updated&per_page=10&type=public`
+          `https://api.github.com/users/${username}/repos?sort=updated&per_page=12&type=public`,
+          {
+            headers: {
+              Accept: 'application/vnd.github+json',
+            },
+          }
         )
         if (!res.ok) throw new Error('GitHub API error')
         const data: GitHubRepo[] = await res.json()
 
-        // Filter out forks, sort by stars, take top 6
+        // Filter out forks, keep real projects even if descriptions are missing.
         const filtered = data
-          .filter(r => !r.fork && r.description)
+          .filter(r => !r.fork)
           .sort((a, b) => b.stargazers_count - a.stargazers_count)
           .slice(0, 6)
+          .map((repo) => ({
+            ...repo,
+            description: repo.description || 'Open the repository on GitHub to explore the full project details.',
+          }))
 
         setRepos(filtered)
       } catch (err) {

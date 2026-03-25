@@ -42,6 +42,11 @@ export function ProjectsSection() {
           {error && (
             <p className="col-span-3 text-center text-muted-foreground">{error}</p>
           )}
+          {!loading && !error && repos.length === 0 && (
+            <p className="col-span-3 text-center text-muted-foreground">
+              No public GitHub projects are available right now.
+            </p>
+          )}
           {!loading &&
             repos.map((repo, index) => (
               <motion.article
