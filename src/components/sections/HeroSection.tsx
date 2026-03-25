@@ -28,21 +28,11 @@ export function HeroSection() {
           </span>
         </motion.div>
 
-        {/* Replace with <img src="/resume.jpg" className="h-24 w-24 rounded-full object-cover" /> when you have a photo */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.5 }}
-          className="mx-auto mb-6 flex h-24 w-24 items-center justify-center rounded-full bg-gradient-to-br from-primary to-primary/60 text-2xl font-bold text-primary-foreground shadow-lg"
-        >
-          RS
-        </motion.div>
-
         <motion.h1
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.1 }}
-          className="mb-6 font-heading text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl lg:text-7xl"
+          className="mb-5 font-heading text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl lg:text-7xl"
         >
           Hi, I'm{" "}
           <span className="text-gradient">Raunak Sharma</span>
@@ -54,7 +44,7 @@ export function HeroSection() {
           transition={{ duration: 0.6, delay: 0.2 }}
           className="mb-4 font-heading text-xl font-medium text-foreground/90 sm:text-2xl"
         >
-          Aspiring Frontend Developer & UI/UX Designer
+          Frontend Developer & UI/UX Designer
         </motion.p>
 
         <motion.p
@@ -72,13 +62,21 @@ export function HeroSection() {
           transition={{ duration: 0.6, delay: 0.4 }}
           className="mb-12 flex flex-wrap items-center justify-center gap-4"
         >
-          <Button size="lg" onClick={scrollToProjects} className="gap-2">
+          <Button
+            size="lg"
+            onClick={scrollToProjects}
+            className="gap-2 transition-transform duration-300 hover:-translate-y-1 hover:shadow-lg"
+          >
             View Projects
             <ArrowDown className="h-4 w-4" />
           </Button>
           {/* Replace /resume.pdf with your actual hosted resume URL */}
           <a href="/resume.pdf" target="_blank" rel="noopener noreferrer">
-            <Button size="lg" variant="outline" className="gap-2">
+            <Button
+              size="lg"
+              variant="outline"
+              className="gap-2 transition-transform duration-300 hover:-translate-y-1 hover:shadow-lg"
+            >
               <Download className="h-4 w-4" />
               Download Resume
             </Button>
@@ -95,7 +93,7 @@ export function HeroSection() {
             href="https://github.com/RoNnY125-coder"
             target="_blank"
             rel="noopener noreferrer"
-            className="flex h-11 w-11 items-center justify-center rounded-full border border-border bg-card/50 text-muted-foreground transition-all hover:border-primary/50 hover:text-primary"
+            className="flex h-11 w-11 items-center justify-center rounded-full border border-border bg-card/50 text-muted-foreground transition-all duration-300 hover:-translate-y-1 hover:border-primary/50 hover:shadow-lg hover:text-primary"
           >
             <Github className="h-5 w-5" />
           </a>
@@ -103,7 +101,7 @@ export function HeroSection() {
             href="https://www.linkedin.com/in/raunak-sharma-b91650344"
             target="_blank"
             rel="noopener noreferrer"
-            className="flex h-11 w-11 items-center justify-center rounded-full border border-border bg-card/50 text-muted-foreground transition-all hover:border-primary/50 hover:text-primary"
+            className="flex h-11 w-11 items-center justify-center rounded-full border border-border bg-card/50 text-muted-foreground transition-all duration-300 hover:-translate-y-1 hover:border-primary/50 hover:shadow-lg hover:text-primary"
           >
             <Linkedin className="h-5 w-5" />
           </a>
@@ -111,7 +109,7 @@ export function HeroSection() {
             href="https://www.instagram.com/basically._.raunak?igsh=MXNrNDd0bzRkcjl5MQ=="
             target="_blank"
             rel="noopener noreferrer"
-            className="flex h-11 w-11 items-center justify-center rounded-full border border-border bg-card/50 text-muted-foreground transition-all hover:border-primary/50 hover:text-primary"
+            className="flex h-11 w-11 items-center justify-center rounded-full border border-border bg-card/50 text-muted-foreground transition-all duration-300 hover:-translate-y-1 hover:border-primary/50 hover:shadow-lg hover:text-primary"
           >
             <Instagram className="h-5 w-5" />
           </a>

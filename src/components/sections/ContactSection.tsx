@@ -111,7 +111,7 @@ export function ContactSection() {
                     </div>
                     <div>
                       <p className="text-sm text-muted-foreground">Location</p>
-                      <p className="font-medium">Bhopal, Madhya Pradesh, India</p>
+                      <p className="font-medium">Delhi, India</p>
                     </div>
                   </div>
                 </div>
@@ -128,7 +128,7 @@ export function ContactSection() {
                         href={social.href}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="group flex h-12 w-12 items-center justify-center rounded-xl border border-border bg-card transition-all hover:border-primary/50 hover:bg-primary/10"
+                        className="group flex h-12 w-12 items-center justify-center rounded-xl border border-border bg-card transition-all duration-300 hover:-translate-y-1 hover:border-primary/50 hover:bg-primary/10 hover:shadow-lg"
                       >
                         <Icon className="h-5 w-5 text-muted-foreground transition-colors group-hover:text-primary" />
                       </a>
