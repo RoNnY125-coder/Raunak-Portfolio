@@ -13,6 +13,14 @@ interface GitHubRepo {
   fork?: boolean
 }
 
+const hiddenRepos = new Set([
+  'raunak protfolio',
+  'ronny125coder',
+  'tma',
+  'dummy website 1',
+  'portfolio prototype',
+])
+
 export function useGitHubProjects(username: string) {
   const [repos, setRepos] = useState<GitHubRepo[]>([])
   const [loading, setLoading] = useState(true)
@@ -21,7 +29,10 @@ export function useGitHubProjects(username: string) {
   useEffect(() => {
     const normalizeRepos = (data: GitHubRepo[]) =>
       data
-        .filter((repo) => !repo.fork)
+        .filter((repo) => {
+          const normalizedName = repo.name.replace(/[-_]+/g, ' ').trim().toLowerCase()
+          return !repo.fork && !hiddenRepos.has(normalizedName)
+        })
         .sort(
           (a, b) =>
             new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime()
