@@ -19,32 +19,43 @@ export function useGitHubProjects(username: string) {
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
+    const normalizeRepos = (data: GitHubRepo[]) =>
+      data
+        .filter((repo) => !repo.fork)
+        .sort(
+          (a, b) =>
+            new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime()
+        )
+        .map((repo) => ({
+          ...repo,
+          description: repo.description || 'Open the repository on GitHub to explore the full project details.',
+        }))
+
     async function fetchRepos() {
       try {
-        const res = await fetch(
-          `https://api.github.com/users/${username}/repos?sort=updated&per_page=12&type=public`,
-          {
-            headers: {
-              Accept: 'application/vnd.github+json',
-            },
-          }
-        )
-        if (!res.ok) throw new Error('GitHub API error')
-        const data: GitHubRepo[] = await res.json()
-
-        // Filter out forks, keep real projects even if descriptions are missing.
-        const filtered = data
-          .filter(r => !r.fork)
-          .sort((a, b) => b.stargazers_count - a.stargazers_count)
-          .slice(0, 6)
-          .map((repo) => ({
-            ...repo,
-            description: repo.description || 'Open the repository on GitHub to explore the full project details.',
-          }))
-
-        setRepos(filtered)
+        const localRes = await fetch(`/api/github-projects?username=${username}`)
+        if (!localRes.ok) throw new Error('Internal GitHub proxy error')
+        const localData: GitHubRepo[] = await localRes.json()
+        setRepos(normalizeRepos(localData))
       } catch (err) {
-        setError('Could not load projects from GitHub.')
+        try {
+          const directRes = await fetch(
+            `https://api.github.com/users/${username}/repos?sort=updated&per_page=100&type=public`,
+            {
+              headers: {
+                Accept: 'application/vnd.github+json',
+              },
+            }
+          )
+
+          if (!directRes.ok) throw new Error('GitHub API error')
+
+          const directData: GitHubRepo[] = await directRes.json()
+          setRepos(normalizeRepos(directData))
+          setError(null)
+        } catch (fallbackErr) {
+          setError('Could not load projects from GitHub.')
+        }
       } finally {
         setLoading(false)
       }

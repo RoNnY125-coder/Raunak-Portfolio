@@ -1,6 +1,6 @@
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
-import { ExternalLink, Github, Folder } from "lucide-react";
+import { ArrowUpRight, ExternalLink, Github, Folder } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useGitHubProjects } from "@/hooks/useGitHubProjects";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -101,6 +101,27 @@ export function ProjectsSection() {
                       {topic}
                     </span>
                   ))}
+                </div>
+                <div className="mt-6 flex items-center justify-between gap-3 border-t border-border/60 pt-4">
+                  <a
+                    href={repo.html_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 text-sm font-medium text-primary transition-colors hover:text-primary/80"
+                  >
+                    View Repository
+                    <ArrowUpRight className="h-4 w-4" />
+                  </a>
+                  {repo.homepage && (
+                    <a
+                      href={repo.homepage}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-sm text-muted-foreground transition-colors hover:text-foreground"
+                    >
+                      Live Demo
+                    </a>
+                  )}
                 </div>
               </motion.article>
             ))}
