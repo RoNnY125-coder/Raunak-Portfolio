@@ -29,8 +29,22 @@ export function useGitHubProjects(username: string) {
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
-    const normalizeRepos = (data: GitHubRepo[]) =>
-      data
+    const normalizeRepos = (data: GitHubRepo[]) => {
+      const customRepos: GitHubRepo[] = [
+        {
+          id: 999999999,
+          name: 'CampusMind',
+          description: 'A full-stack AI student companion featuring NextAuth, Supabase, Framer Motion, and a vector memory layer for personalized study assistance.',
+          html_url: 'https://github.com/RoNnY125-coder/CampusMind',
+          homepage: null,
+          topics: ['nextjs', 'typescript', 'supabase', 'ai', 'framer-motion'],
+          stargazers_count: 0,
+          language: 'TypeScript',
+          updated_at: new Date().toISOString(),
+        }
+      ]
+
+      const fetchedAndNormalized = data
         .filter((repo) => {
           const normalizedName = repo.name.replace(/[-_]+/g, ' ').trim().toLowerCase()
           return !repo.fork && !hiddenRepos.has(normalizedName)
@@ -43,6 +57,9 @@ export function useGitHubProjects(username: string) {
           ...repo,
           description: repo.description || 'Open the repository on GitHub to explore the full project details.',
         }))
+        
+      return [...customRepos, ...fetchedAndNormalized]
+    }
 
     async function fetchRepos() {
       try {
