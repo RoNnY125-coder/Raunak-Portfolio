@@ -20,7 +20,13 @@ const certifications = [
     platform: "Vityarthi",
     year: "2025",
     credential:
-"https://www.vityarthi.com/certificate/v3bCxOzG6A9g",
+   "https://www.vityarthi.com/certificate/v3bCxOzG6A9g",
+  },
+  {
+    name: "Digital Literacy",
+    platform: "Vityarthi",
+    year: "2025",
+    credential: "https://www.vityarthi.com/certificate/9ncUzDHR348m",
   },
 ];
 
