@@ -15,7 +15,9 @@ interface GitHubRepo {
 
 const hiddenRepos = new Set([
   'raunak protfolio',
+  'ronny125 coder',
   'ronny125coder',
+  'bankagement',
   'tma',
   'dummy website 1',
   'portfolio prototype',
