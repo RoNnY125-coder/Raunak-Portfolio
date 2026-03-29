@@ -36,7 +36,7 @@ export function useGitHubProjects(username: string) {
           name: 'CampusMind',
           description: 'A full-stack AI student companion featuring NextAuth, Supabase, Framer Motion, and a vector memory layer for personalized study assistance.',
           html_url: 'https://github.com/RoNnY125-coder/CampusMind',
-          homepage: null,
+          homepage: 'https://campus-mind-flame.vercel.app/',
           topics: ['nextjs', 'typescript', 'supabase', 'ai', 'framer-motion'],
           stargazers_count: 0,
           language: 'TypeScript',
