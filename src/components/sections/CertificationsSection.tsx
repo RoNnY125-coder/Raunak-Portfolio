@@ -7,26 +7,33 @@ const certifications = [
     name: "Design2Code",
     platform: "Unstop",
     year: "2025",
-    credential: "https://www.linkedin.com/posts/raunak-sharma-b91650344_design2code-figma-uiux-activity-7409111679499689985-_9eZ?utm_source=share&utm_medium=member_desktop&rcm=ACoAAFY8o50BE0sEy87C3_WPmiWdyMAj-GzA-48",
+    credential:
+      "https://www.linkedin.com/posts/raunak-sharma-b91650344_design2code-figma-uiux-activity-7409111679499689985-_9eZ?utm_source=share&utm_medium=member_desktop&rcm=ACoAAFY8o50BE0sEy87C3_WPmiWdyMAj-GzA-48",
   },
   {
     name: "Hack Secure",
     platform: "VIT Bhopal",
     year: "2025",
-    credential: "https://www.linkedin.com/posts/raunak-sharma-b91650344_hacksecure2025-hackathon-ideathon-activity-7409219318111993856-HXPP?utm_source=share&utm_medium=member_desktop&rcm=ACoAAFY8o50BE0sEy87C3_WPmiWdyMAj-GzA-48",
+    credential:
+      "https://www.linkedin.com/posts/raunak-sharma-b91650344_hacksecure2025-hackathon-ideathon-activity-7409219318111993856-HXPP?utm_source=share&utm_medium=member_desktop&rcm=ACoAAFY8o50BE0sEy87C3_WPmiWdyMAj-GzA-48",
   },
   {
     name: "Python Essentials",
     platform: "Vityarthi",
     year: "2025",
-    credential:
-   "https://www.vityarthi.com/certificate/v3bCxOzG6A9g",
+    credential: "https://www.vityarthi.com/certificate/v3bCxOzG6A9g",
   },
   {
     name: "Digital Literacy",
     platform: "Vityarthi",
-    year: "2025",
+    year: "2026",
     credential: "https://www.vityarthi.com/certificate/9ncUzDHR348m",
+  },
+  {
+    name: "Fundamentals in AI ML",
+    platform: "Vityarthi",
+    year: "2026",
+    credential: "https://www.vityarthi.com/certificate/Jl4tEodmAwv6",
   },
 ];
 
@@ -37,7 +44,7 @@ export function CertificationsSection() {
   return (
     <section id="certifications" className="relative py-24 lg:pl-20">
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-primary/5 to-transparent" />
-      
+
       <div className="container relative mx-auto px-6">
         <motion.div
           ref={ref}
@@ -78,7 +85,7 @@ export function CertificationsSection() {
                 </h3>
                 <div className="flex items-center gap-2 text-xs text-muted-foreground">
                   <span>{cert.platform}</span>
-                  <span>•</span>
+                  <span>&bull;</span>
                   <span>{cert.year}</span>
                 </div>
               </motion.a>
