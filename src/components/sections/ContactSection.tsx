@@ -5,13 +5,95 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
-import { supabase } from "@/lib/supabase";
 
 const socialLinks = [
   { name: "GitHub", icon: Github, href: "https://github.com/RoNnY125-coder" },
   { name: "LinkedIn", icon: Linkedin, href: "https://www.linkedin.com/in/raunak-sharma-b91650344" },
   { name: "Instagram", icon: Instagram, href: "https://www.instagram.com/basically._.raunak?igsh=MXNrNDd0bzRkcjl5MQ==" },
 ];
+
+const GEMINI_API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
+
+const SYSTEM_PROMPT = `You are an assistant managing contact form submissions for Raunak Sharma, a software developer based in Delhi, India.
+
+When given a contact form submission, return ONLY a valid JSON object. No explanation, no markdown, no code fences. Raw JSON only.
+
+Use this exact structure:
+
+{
+  "visitor_reply": {
+    "subject": "string",
+    "body": "string"
+  },
+  "owner_summary": {
+    "subject": "string",
+    "body": "string"
+  }
+}
+
+Rules for visitor_reply:
+- Address the visitor by their first name
+- Confirm their message was received
+- Tell them Raunak will respond within 24–48 hours
+- Keep it under 100 words
+- Sign off as "Raunak Sharma"
+- Plain text only, no HTML
+
+Rules for owner_summary:
+- Summarise the visitor's intent in 1–2 sentences
+- Flag with ⚠ Urgent if the message mentions a deadline, job offer, or collaboration
+- Include the visitor's name and email for easy reply
+- Keep it under 80 words
+- Plain text only, no HTML`;
+
+async function generateEmails(name: string, email: string, message: string) {
+  const res = await fetch(
+    `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`,
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        generationConfig: { temperature: 0.3, maxOutputTokens: 600 },
+        systemInstruction: { parts: [{ text: SYSTEM_PROMPT }] },
+        contents: [
+          {
+            role: "user",
+            parts: [
+              {
+                text: `New contact form submission:\n\nName: ${name}\nEmail: ${email}\nMessage: ${message}\nSubmitted at: ${new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })} IST`,
+              },
+            ],
+          },
+        ],
+      }),
+    }
+  );
+
+  if (!res.ok) {
+    const err = await res.text();
+    throw new Error(`Gemini error ${res.status}: ${err}`);
+  }
+
+  const data = await res.json();
+  const rawText: string = data.candidates[0].content.parts[0].text;
+
+  // Strip any accidental markdown fences Gemini might add
+  const cleaned = rawText.replace(/^```(?:json)?\s*/i, "").replace(/\s*```$/, "").trim();
+  return JSON.parse(cleaned);
+}
+
+async function sendEmail(to: string, subject: string, body: string) {
+  // Calls our own server-side API route — keeps the Resend key out of the browser bundle
+  const res = await fetch("/api/send-email", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ to, subject, body }),
+  });
+  if (!res.ok) {
+    const err = await res.text();
+    throw new Error(`Send email failed (${res.status}): ${err}`);
+  }
+}
 
 export function ContactSection() {
   const ref = useRef(null);
@@ -23,42 +105,37 @@ export function ContactSection() {
     e.preventDefault();
     setIsSubmitting(true);
 
-    if (!supabase) {
-      toast({
-        title: 'Contact form unavailable',
-        description: 'Supabase is not configured right now. Please email me directly.',
-        variant: 'destructive',
-      });
-      setIsSubmitting(false);
-      return;
-    }
-
     const form = e.target as HTMLFormElement;
     const formData = new FormData(form);
+    const name = formData.get("name") as string;
+    const email = formData.get("email") as string;
+    const message = formData.get("message") as string;
 
-    const { error } = await supabase
-      .from('contact_messages')
-      .insert({
-        name: formData.get('name') as string,
-        email: formData.get('email') as string,
-        message: formData.get('message') as string,
-      });
+    try {
+      // 1. Ask Gemini to draft both emails
+      const emails = await generateEmails(name, email, message);
 
-    if (error) {
+      // 2. Deliver auto-reply to the visitor
+      await sendEmail(email, emails.visitor_reply.subject, emails.visitor_reply.body);
+
+      // 3. Deliver briefing summary to Raunak
+      await sendEmail("raunaksh75@gmail.com", emails.owner_summary.subject, emails.owner_summary.body);
+
       toast({
-        title: 'Something went wrong',
-        description: 'Please try again or email me directly.',
-        variant: 'destructive',
-      });
-    } else {
-      toast({
-        title: 'Message sent!',
+        title: "Message sent! ✉️",
         description: "Thanks for reaching out. I'll get back to you soon.",
       });
       form.reset();
+    } catch (err) {
+      console.error("[ContactForm]", err);
+      toast({
+        title: "Something went wrong",
+        description: "Please try again or email me directly at raunaksh75@gmail.com.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
     }
-
-    setIsSubmitting(false);
   };
 
   return (
@@ -100,7 +177,7 @@ export function ContactSection() {
                     </div>
                     <div>
                       <p className="text-sm text-muted-foreground">Email</p>
-                      <a href="mailto:raunak@example.com" className="font-medium hover:text-primary">
+                      <a href="mailto:raunaksh75@gmail.com" className="font-medium hover:text-primary">
                         raunaksh75@gmail.com
                       </a>
                     </div>
@@ -188,7 +265,7 @@ export function ContactSection() {
                 </div>
                 <Button type="submit" size="lg" className="w-full gap-2" disabled={isSubmitting}>
                   {isSubmitting ? (
-                    "Sending..."
+                    "Sending…"
                   ) : (
                     <>
                       Send Message
