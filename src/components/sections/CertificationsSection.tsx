@@ -35,6 +35,18 @@ const certifications = [
     year: "2026",
     credential: "https://www.vityarthi.com/certificate/Jl4tEodmAwv6",
   },
+  {
+    name: "Vibe with India Hackathon",
+    platform: "Unstop",
+    year: "2026",
+    credential: "/vibe-with-india-hackathon-certificate.pdf",
+  },
+  {
+    name: "Treasure Hunt",
+    platform: "VIT Bhopal",
+    year: "2026",
+    credential: "/treasure-hunt-certificate.png",
+  },
 ];
 
 export function CertificationsSection() {
