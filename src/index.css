@@ -17,7 +17,7 @@
     --popover: 220 18% 8%;
     --popover-foreground: 0 0% 95%;
 
-    --primary: 220 60% 60%;
+    --primary: 0 85% 60%;
     --primary-foreground: 0 0% 100%;
 
     --secondary: 220 15% 12%;
@@ -34,26 +34,26 @@
 
     --border: 220 15% 14%;
     --input: 220 15% 14%;
-    --ring: 220 60% 60%;
+    --ring: 0 85% 60%;
 
     --radius: 0.75rem;
 
-    --gradient-primary: linear-gradient(135deg, hsl(220, 60%, 60%), hsl(200, 70%, 65%));
+    --gradient-primary: linear-gradient(135deg, hsl(0, 85%, 60%), hsl(345, 90%, 65%));
     --gradient-card: linear-gradient(180deg, hsl(220, 18%, 10%), hsl(220, 18%, 6%));
-    --gradient-hero: radial-gradient(ellipse at 50% 0%, hsl(220, 60%, 60%, 0.12), transparent 60%);
+    --gradient-hero: radial-gradient(ellipse at 50% 0%, hsl(0, 85%, 60%, 0.12), transparent 60%);
 
-    --shadow-glow: 0 0 60px hsl(220, 60%, 60%, 0.12);
+    --shadow-glow: 0 0 60px hsl(0, 85%, 60%, 0.12);
     --shadow-card: 0 4px 24px hsl(220, 20%, 2%, 0.6);
     --shadow-card-hover: 0 8px 40px hsl(220, 20%, 2%, 0.8);
 
     --sidebar-background: 220 18% 5%;
     --sidebar-foreground: 0 0% 85%;
-    --sidebar-primary: 220 60% 60%;
+    --sidebar-primary: 0 85% 60%;
     --sidebar-primary-foreground: 0 0% 100%;
     --sidebar-accent: 220 15% 12%;
     --sidebar-accent-foreground: 0 0% 95%;
     --sidebar-border: 220 15% 12%;
-    --sidebar-ring: 220 60% 60%;
+    --sidebar-ring: 0 85% 60%;
   }
 }
 
@@ -151,16 +151,16 @@
 /* Antigravity utility classes */
 
 .glow-text {
-  text-shadow: 0 0 20px hsl(220 60% 60% / 0.35), 0 0 40px hsl(220 60% 60% / 0.12);
+  text-shadow: 0 0 20px hsl(0 85% 60% / 0.35), 0 0 40px hsl(0 85% 60% / 0.12);
 }
 
 .glow-box {
-  box-shadow: 0 0 15px hsl(220 60% 60% / 0.15), 0 0 30px hsl(220 60% 60% / 0.06);
+  box-shadow: 0 0 15px hsl(0 85% 60% / 0.15), 0 0 30px hsl(0 85% 60% / 0.06);
 }
 
 .glow-border {
-  border-color: hsl(220 60% 60% / 0.35);
-  box-shadow: 0 0 10px hsl(220 60% 60% / 0.12);
+  border-color: hsl(0 85% 60% / 0.35);
+  box-shadow: 0 0 10px hsl(0 85% 60% / 0.12);
 }
 
 .section-fade {

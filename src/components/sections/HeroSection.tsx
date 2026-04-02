@@ -13,7 +13,7 @@ export function HeroSection() {
       className="relative flex min-h-screen items-center justify-center overflow-hidden px-6 pt-16 lg:pl-20 lg:pt-0"
     >
       {/* Background effects */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_0%,hsl(220,60%,60%,0.12),transparent_60%)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_0%,hsl(0,85%,60%,0.12),transparent_60%)]" />
       <div className="absolute right-0 top-1/4 h-96 w-96 rounded-full bg-primary/5 blur-3xl" />
       <div className="absolute bottom-1/4 left-0 h-64 w-64 rounded-full bg-primary/5 blur-3xl" />
 

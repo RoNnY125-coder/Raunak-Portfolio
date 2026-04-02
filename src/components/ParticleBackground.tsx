@@ -66,13 +66,13 @@ const ParticleBackground = () => {
 
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.size + glow * 1.5, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(140, 170, 255, ${p.opacity})`;
+        ctx.fillStyle = `rgba(255, 80, 80, ${p.opacity})`;
         ctx.fill();
 
         if (glow > 0.2) {
           ctx.beginPath();
           ctx.arc(p.x, p.y, p.size + glow * 4, 0, Math.PI * 2);
-          ctx.fillStyle = `rgba(100, 140, 255, ${glow * 0.15})`;
+          ctx.fillStyle = `rgba(255, 60, 60, ${glow * 0.15})`;
           ctx.fill();
         }
       }
