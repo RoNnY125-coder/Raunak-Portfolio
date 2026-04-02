@@ -2,59 +2,58 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Raunak Sharma Portfolio Design System */
+/* Raunak Sharma Portfolio — Antigravity Theme */
 
 @layer base {
-  @import url('https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
   :root {
-    --background: 220 20% 6%;
-    --foreground: 0 0% 98%;
+    --background: 220 20% 4%;
+    --foreground: 0 0% 95%;
 
-    --card: 220 18% 10%;
-    --card-foreground: 0 0% 98%;
+    --card: 220 18% 8%;
+    --card-foreground: 0 0% 95%;
 
-    --popover: 220 18% 10%;
-    --popover-foreground: 0 0% 98%;
+    --popover: 220 18% 8%;
+    --popover-foreground: 0 0% 95%;
 
-    --primary: 16 90% 65%;
-    --primary-foreground: 220 20% 6%;
+    --primary: 220 60% 60%;
+    --primary-foreground: 0 0% 100%;
 
-    --secondary: 220 15% 15%;
-    --secondary-foreground: 0 0% 90%;
+    --secondary: 220 15% 12%;
+    --secondary-foreground: 0 0% 80%;
 
-    --muted: 220 15% 18%;
-    --muted-foreground: 220 10% 55%;
+    --muted: 220 15% 15%;
+    --muted-foreground: 220 10% 50%;
 
-    --accent: 16 90% 65%;
-    --accent-foreground: 220 20% 6%;
+    --accent: 220 50% 50%;
+    --accent-foreground: 0 0% 100%;
 
-    --destructive: 0 84% 60%;
+    --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
 
-    --border: 220 15% 18%;
-    --input: 220 15% 15%;
-    --ring: 16 90% 65%;
+    --border: 220 15% 14%;
+    --input: 220 15% 14%;
+    --ring: 220 60% 60%;
 
     --radius: 0.75rem;
 
-    /* Custom tokens */
-    --gradient-primary: linear-gradient(135deg, hsl(16, 90%, 65%), hsl(30, 95%, 60%));
-    --gradient-card: linear-gradient(180deg, hsl(220, 18%, 12%), hsl(220, 18%, 8%));
-    --gradient-hero: radial-gradient(ellipse at 50% 0%, hsl(16, 90%, 65%, 0.15), transparent 60%);
-    
-    --shadow-glow: 0 0 60px hsl(16, 90%, 65%, 0.15);
-    --shadow-card: 0 4px 24px hsl(220, 20%, 4%, 0.5);
-    --shadow-card-hover: 0 8px 40px hsl(220, 20%, 4%, 0.7);
+    --gradient-primary: linear-gradient(135deg, hsl(220, 60%, 60%), hsl(200, 70%, 65%));
+    --gradient-card: linear-gradient(180deg, hsl(220, 18%, 10%), hsl(220, 18%, 6%));
+    --gradient-hero: radial-gradient(ellipse at 50% 0%, hsl(220, 60%, 60%, 0.12), transparent 60%);
 
-    --sidebar-background: 220 18% 8%;
+    --shadow-glow: 0 0 60px hsl(220, 60%, 60%, 0.12);
+    --shadow-card: 0 4px 24px hsl(220, 20%, 2%, 0.6);
+    --shadow-card-hover: 0 8px 40px hsl(220, 20%, 2%, 0.8);
+
+    --sidebar-background: 220 18% 5%;
     --sidebar-foreground: 0 0% 85%;
-    --sidebar-primary: 16 90% 65%;
-    --sidebar-primary-foreground: 220 20% 6%;
-    --sidebar-accent: 220 15% 15%;
-    --sidebar-accent-foreground: 0 0% 98%;
-    --sidebar-border: 220 15% 15%;
-    --sidebar-ring: 16 90% 65%;
+    --sidebar-primary: 220 60% 60%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 220 15% 12%;
+    --sidebar-accent-foreground: 0 0% 95%;
+    --sidebar-border: 220 15% 12%;
+    --sidebar-ring: 220 60% 60%;
   }
 }
 
@@ -69,6 +68,7 @@
 
   body {
     @apply bg-background text-foreground font-body antialiased;
+    font-family: 'Inter', sans-serif;
   }
 
   h1, h2, h3, h4, h5, h6 {
@@ -146,4 +146,39 @@
     from { opacity: 0; }
     to { opacity: 1; }
   }
+}
+
+/* Antigravity utility classes */
+
+.glow-text {
+  text-shadow: 0 0 20px hsl(220 60% 60% / 0.35), 0 0 40px hsl(220 60% 60% / 0.12);
+}
+
+.glow-box {
+  box-shadow: 0 0 15px hsl(220 60% 60% / 0.15), 0 0 30px hsl(220 60% 60% / 0.06);
+}
+
+.glow-border {
+  border-color: hsl(220 60% 60% / 0.35);
+  box-shadow: 0 0 10px hsl(220 60% 60% / 0.12);
+}
+
+.section-fade {
+  opacity: 0;
+  transform: translateY(32px);
+  transition: all 0.7s ease-out;
+}
+
+.section-fade.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@keyframes glow-pulse {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 0.85; }
+}
+
+.animate-glow-pulse {
+  animation: glow-pulse 3s ease-in-out infinite;
 }

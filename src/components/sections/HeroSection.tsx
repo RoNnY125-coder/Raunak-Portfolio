@@ -13,7 +13,7 @@ export function HeroSection() {
       className="relative flex min-h-screen items-center justify-center overflow-hidden px-6 pt-16 lg:pl-20 lg:pt-0"
     >
       {/* Background effects */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_0%,hsl(16,90%,65%,0.12),transparent_60%)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_0%,hsl(220,60%,60%,0.12),transparent_60%)]" />
       <div className="absolute right-0 top-1/4 h-96 w-96 rounded-full bg-primary/5 blur-3xl" />
       <div className="absolute bottom-1/4 left-0 h-64 w-64 rounded-full bg-primary/5 blur-3xl" />
 
@@ -35,7 +35,7 @@ export function HeroSection() {
           className="mb-5 font-heading text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl lg:text-7xl"
         >
           Hi, I'm{" "}
-          <span className="text-gradient">Raunak Sharma</span>
+          <span className="text-gradient glow-text">Raunak Sharma</span>
         </motion.h1>
 
         <motion.p
@@ -126,7 +126,7 @@ export function HeroSection() {
         <motion.div
           animate={{ y: [0, 10, 0] }}
           transition={{ duration: 2, repeat: Infinity }}
-          className="flex h-14 w-8 items-start justify-center rounded-full border border-border/50 p-2"
+          className="flex h-14 w-8 items-start justify-center rounded-full border border-border/50 p-2 animate-glow-pulse"
         >
           <motion.div className="h-2 w-1 rounded-full bg-primary" />
         </motion.div>

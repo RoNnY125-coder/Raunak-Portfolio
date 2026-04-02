@@ -8,6 +8,7 @@ import { ExperienceSection } from "@/components/sections/ExperienceSection";
 import { UIUXSection } from "@/components/sections/UIUXSection";
 import { CertificationsSection } from "@/components/sections/CertificationsSection";
 import { ContactSection } from "@/components/sections/ContactSection";
+import ParticleBackground from "@/components/ParticleBackground";
 
 const Index = () => {
   const [activeSection, setActiveSection] = useState("home");
@@ -47,8 +48,9 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      <ParticleBackground />
       <Sidebar activeSection={activeSection} />
-      <main>
+      <main className="relative z-10">
         <HeroSection />
         <AboutSection />
         <SkillsSection />

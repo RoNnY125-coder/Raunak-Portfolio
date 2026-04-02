@@ -63,7 +63,7 @@ export function ExperienceSection() {
                     <Icon className="h-3.5 w-3.5 text-primary-foreground" />
                   </div>
 
-                  <div className="card-glass p-6 transition-all duration-300 hover:border-primary/30">
+                  <div className="card-glass hover:glow-border p-6 transition-all duration-300 hover:border-primary/30">
                     <div className="mb-4 flex flex-wrap items-center gap-3">
                       <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 md:hidden">
                         <Icon className="h-5 w-5 text-primary" />

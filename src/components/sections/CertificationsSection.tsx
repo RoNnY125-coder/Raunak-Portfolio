@@ -84,7 +84,7 @@ export function CertificationsSection() {
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={isInView ? { opacity: 1, scale: 1 } : {}}
                 transition={{ duration: 0.4, delay: index * 0.1 }}
-                className="group card-glass p-5 transition-all duration-300 hover:border-primary/30"
+                className="group card-glass hover:glow-border p-5 transition-all duration-300 hover:border-primary/30"
               >
                 <div className="mb-4 flex items-start justify-between">
                   <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">

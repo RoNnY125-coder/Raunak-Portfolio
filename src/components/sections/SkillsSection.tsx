@@ -72,7 +72,7 @@ export function SkillsSection() {
               initial={{ opacity: 0, y: 30 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.5, delay: categoryIndex * 0.1 }}
-              className="card-glass p-6 lg:p-8"
+              className="card-glass hover:glow-border p-6 lg:p-8"
             >
               <h3 className="mb-6 font-heading text-xl font-semibold text-gradient">
                 {category.title}

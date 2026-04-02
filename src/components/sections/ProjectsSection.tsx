@@ -54,7 +54,7 @@ export function ProjectsSection() {
                 initial={{ opacity: 0, y: 30 }}
                 animate={isInView ? { opacity: 1, y: 0 } : {}}
                 transition={{ duration: 0.5, delay: index * 0.08 }}
-                className="group flex flex-col rounded-2xl border bg-background/60 p-6 backdrop-blur transition-all duration-300 hover:-translate-y-1 hover:border-primary/40 hover:shadow-lg"
+                className="group flex flex-col rounded-2xl border bg-background/60 p-6 backdrop-blur transition-all duration-300 hover:-translate-y-1 hover:border-primary/40 hover:shadow-lg hover:glow-border"
               >
                 <div className="mb-4 flex items-center justify-between">
                   <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10">
