@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 
 interface WorkPanelProps {
   onNavigate: (index: number) => void;
@@ -10,131 +10,192 @@ interface Repo {
   description: string;
   language: string;
   html_url: string;
+  stargazers_count: number;
 }
+
+const LANG_COLORS: Record<string, string> = {
+  TypeScript: '#3178c6', JavaScript: '#f1e05a', Python: '#3572A5',
+  HTML: '#e34c26', CSS: '#563d7c', Rust: '#dea584',
+  Go: '#00ADD8', Java: '#b07219', 'C++': '#f34b7d',
+};
 
 export const WorkPanel: React.FC<WorkPanelProps> = ({ onNavigate }) => {
   const [repos, setRepos] = useState<Repo[]>([]);
   const [loading, setLoading] = useState(true);
+  const [hoveredId, setHoveredId] = useState<number | null>(null);
+  const [visible, setVisible] = useState(false);
+  const sectionRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
-    fetch('https://api.github.com/users/RoNnY125-coder/repos?sort=updated&per_page=6')
+    fetch('https://api.github.com/users/RoNnY125-coder/repos?sort=updated&per_page=9')
       .then(res => res.json())
-      .then(data => {
-        if (Array.isArray(data)) {
-          setRepos(data);
-        }
-        setLoading(false);
-      })
-      .catch(err => {
-        console.error("Error fetching repos:", err);
-        setLoading(false);
-      });
+      .then(data => { if (Array.isArray(data)) setRepos(data); setLoading(false); })
+      .catch(() => setLoading(false));
   }, []);
 
+  // Trigger card animations when panel becomes visible
+  useEffect(() => {
+    const t = setTimeout(() => setVisible(true), 200);
+    return () => clearTimeout(t);
+  }, []);
+
+  const cardEnter = (i: number): React.CSSProperties => ({
+    opacity: visible ? 1 : 0,
+    transform: visible ? 'translateY(0) scale(1)' : 'translateY(40px) scale(0.96)',
+    transition: `opacity 600ms cubic-bezier(0.16,1,0.3,1) ${i * 80}ms, transform 600ms cubic-bezier(0.16,1,0.3,1) ${i * 80}ms`,
+  });
+
   return (
-    <section className="w-screen h-screen flex-shrink-0 overflow-y-auto bg-[#181212]">
-      <div className="px-8 md:px-16 pt-32 pb-24 max-w-7xl mx-auto">
-        <div className="flex justify-between items-end mb-24">
-          <h2
-            className="font-headline font-black uppercase text-[#FFB3AE] leading-none whitespace-pre-line"
-            style={{ fontSize: 'clamp(2.5rem, 6vw, 4.5rem)' }}
+    <section ref={sectionRef} className="w-screen h-screen flex-shrink-0 overflow-y-auto bg-[#181212]" style={{ scrollbarWidth: 'thin', scrollbarColor: '#8D1515 #181212' }}>
+      <div style={{ padding: 'clamp(80px, 12vh, 120px) clamp(20px, 5vw, 80px) 80px', maxWidth: '1400px', margin: '0 auto' }}>
+
+        {/* Header */}
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: 'clamp(32px, 6vh, 64px)', ...cardEnter(0) }}>
+          <div>
+            <p style={{ fontFamily: "'Inter', sans-serif", fontSize: '10px', letterSpacing: '0.4em', color: '#8D1515', textTransform: 'uppercase', marginBottom: '8px' }}>
+              FULL-STACK PROJECTS
+            </p>
+            <h2 style={{ fontFamily: "'Epilogue', sans-serif", fontWeight: 900, fontSize: 'clamp(2rem, 5vw, 4rem)', color: '#FFB3AE', lineHeight: 0.9, textTransform: 'uppercase', letterSpacing: '-0.02em' }}>
+              Selected<br />Works
+            </h2>
+          </div>
+          <a href="https://github.com/RoNnY125-coder" target="_blank" rel="noopener noreferrer"
+            style={{ fontFamily: "'Epilogue', sans-serif", fontWeight: 700, fontSize: '11px', letterSpacing: '0.2em', color: '#c6c6c7', textDecoration: 'none', textTransform: 'uppercase', transition: 'color 250ms', border: '1px solid #3b3333', padding: '8px 16px' }}
+            onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = '#FFB3AE'; (e.currentTarget as HTMLElement).style.borderColor = '#8D1515'; }}
+            onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = '#c6c6c7'; (e.currentTarget as HTMLElement).style.borderColor = '#3b3333'; }}
           >
-            {'Selected\nWorks'}
-          </h2>
-          <span className="font-headline font-bold tracking-widest text-[#c6c6c7]">
-            01 // 06
-          </span>
+            ALL REPOS ↗
+          </a>
         </div>
 
-        <div className="grid grid-cols-12 gap-6 relative">
-          {loading ? (
-            <>
-              <div className="col-span-12 md:col-span-8 aspect-video bg-[#251e1e] animate-pulse"></div>
-              <div className="col-span-12 md:col-span-4 aspect-[3/4] bg-[#251e1e] animate-pulse self-center"></div>
-              <div className="col-span-12 md:col-start-2 md:col-span-6 aspect-square bg-[#251e1e] animate-pulse"></div>
-            </>
-          ) : (
-            <>
-              {/* Slot 01: DESIGN-TO-CODE effect */}
-              {repos[0] && (
-                <a href={repos[0].html_url} target="_blank" rel="noopener noreferrer" className="col-span-12 md:col-span-8 aspect-video bg-[#251e1e] relative group overflow-hidden block">
-                  <div className="absolute inset-0 bg-[#3b3333] opacity-60 scale-105 group-hover:scale-100 transition-transform duration-700"></div>
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#181212] to-transparent"></div>
-                  <div className="absolute bottom-8 left-8 z-10 w-full pr-8">
-                    <span className="bg-[#8D1515] text-[#ff998f] px-3 py-1 text-xs uppercase font-label">
-                      {repos[0].language || 'Code'}
-                    </span>
-                    <h3 className="text-4xl font-headline font-bold text-[#eedfdf] mt-4 uppercase">
-                      {repos[0].name}
-                    </h3>
-                    <p className="text-[#c6c6c7] mt-2 line-clamp-2 max-w-xl">{repos[0].description}</p>
-                  </div>
-                </a>
-              )}
-
-              {/* Slot 02: Ghost number effect */}
-              {repos[1] && (
-                <a href={repos[1].html_url} target="_blank" rel="noopener noreferrer" className="col-span-12 md:col-span-4 self-center aspect-[3/4] bg-[#302828] relative group overflow-hidden block">
-                  <span className="absolute -top-4 -left-4 font-headline font-black text-[#FFB3AE] opacity-10" style={{ fontSize: 'clamp(4rem,15vw,12rem)' }}>
-                    02
-                  </span>
-                  <div className="absolute inset-0 bg-[#403737] grayscale opacity-40 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-700"></div>
-                  <div className="absolute bottom-8 left-8 z-10 w-full pr-8">
-                    <h3 className="text-2xl font-headline font-bold text-[#eedfdf] uppercase">{repos[1].name}</h3>
-                    <span className="text-[#FFB3AE] text-sm tracking-widest uppercase mt-2 block">{repos[1].language || 'Project'}</span>
-                  </div>
-                </a>
-              )}
-
-              {/* Slot 03: VIEW PROJECT CTA slide */}
-              {repos[2] && (
-                <a href={repos[2].html_url} target="_blank" rel="noopener noreferrer" className="col-span-12 md:col-start-2 md:col-span-6 aspect-square bg-[#211a1a] relative group overflow-hidden block border-[20px] border-[#181212] hover:border-[0px] transition-all duration-[400ms]">
-                  <div className="absolute inset-0 bg-[#8D1515] mix-blend-multiply opacity-20 group-hover:opacity-0 transition-opacity"></div>
-                  <div className="absolute inset-x-0 bottom-0 bg-[#FFB3AE] text-[#68000b] p-6 text-center transform translate-y-12 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300">
-                    <span className="font-headline font-black text-xl tracking-widest uppercase">VIEW PROJECT</span>
-                  </div>
-                  <div className="absolute inset-0 flex flex-col justify-center items-center p-8 text-center pointer-events-none">
-                     <h3 className="text-4xl font-headline font-bold text-[#eedfdf] uppercase mb-4">{repos[2].name}</h3>
-                     <p className="text-[#c6c6c7] line-clamp-3">{repos[2].description}</p>
-                  </div>
-                </a>
-              )}
-
-              {/* "View All Projects" Card */}
-              <div className="col-span-12 md:col-span-4 md:col-start-9 min-h-[350px]">
-                <button 
-                  onClick={() => window.open('https://github.com/RoNnY125-coder', '_blank')}
-                  className="bg-[#8D1515] hover:bg-[#FFB3AE] w-full h-full p-12 flex flex-col justify-between group transition-colors duration-300 text-left"
-                >
-                  <span className="material-symbols-outlined text-white group-hover:text-[#181212] transition-colors duration-300">arrow_outward</span>
-                  <div>
-                    <h3 className="font-headline font-black text-5xl text-white group-hover:text-[#181212] transition-colors duration-300 uppercase leading-none mb-4">
-                      VIEW ALL PROJECTS
-                    </h3>
-                    <p className="text-[#ff998f] group-hover:text-[#68000b] transition-colors duration-300">
-                      Explore the complete collection on GitHub
-                    </p>
-                  </div>
-                </button>
-              </div>
-            </>
-          )}
-        </div>
-
-        {/* Small repos row (3-col grid below) */}
-        {!loading && repos.length > 3 && (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
-            {repos.slice(3, 6).map((repo) => (
-              <a key={repo.id} href={repo.html_url} target="_blank" rel="noopener noreferrer" className="bg-[#211a1a] p-6 hover:bg-[#251e1e] transition-colors group relative block">
-                <span className="absolute top-6 right-6 material-symbols-outlined text-[#c6c6c7] group-hover:text-[#FFB3AE]">arrow_outward</span>
-                <span className="text-xs text-[#8D1515] font-bold uppercase tracking-widest mb-2 block">{repo.language || 'Repository'}</span>
-                <h4 className="font-headline font-bold text-xl uppercase text-[#eedfdf] mb-2 pr-8 truncate">{repo.name}</h4>
-                <p className="text-[#c6c6c7] text-sm line-clamp-2">{repo.description}</p>
-              </a>
+        {/* Grid */}
+        {loading ? (
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '16px' }}>
+            {Array.from({ length: 6 }).map((_, i) => (
+              <div key={i} style={{ height: '200px', background: '#251e1e', animation: 'shimmer 1.5s ease infinite', animationDelay: `${i * 100}ms` }} />
             ))}
+          </div>
+        ) : (
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(clamp(240px, 28vw, 340px), 1fr))', gap: '12px' }}>
+            {repos.map((repo, i) => {
+              const isHovered = hoveredId === repo.id;
+              const langColor = LANG_COLORS[repo.language] || '#8D1515';
+              return (
+                <a
+                  key={repo.id}
+                  href={repo.html_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'space-between',
+                    padding: '24px',
+                    background: isHovered ? '#251e1e' : '#1a1414',
+                    border: `1px solid ${isHovered ? '#8D1515' : '#251e1e'}`,
+                    textDecoration: 'none',
+                    minHeight: '180px',
+                    position: 'relative',
+                    overflow: 'hidden',
+                    cursor: 'pointer',
+                    transform: isHovered ? 'translateY(-4px) scale(1.02)' : 'translateY(0) scale(1)',
+                    boxShadow: isHovered ? '0 16px 40px rgba(141,21,21,0.18)' : '0 0 0 transparent',
+                    transition: 'all 300ms cubic-bezier(0.16,1,0.3,1)',
+                    ...cardEnter(i + 1),
+                  }}
+                  onMouseEnter={() => setHoveredId(repo.id)}
+                  onMouseLeave={() => setHoveredId(null)}
+                >
+                  {/* Ghost number */}
+                  <span style={{
+                    position: 'absolute', bottom: '-8px', right: '12px',
+                    fontFamily: "'Epilogue', sans-serif", fontWeight: 900,
+                    fontSize: '5rem', color: '#251e1e',
+                    lineHeight: 1, pointerEvents: 'none', userSelect: 'none',
+                    transition: 'color 300ms',
+                    ...(isHovered ? { color: '#302828' } : {}),
+                  }}>
+                    {String(i + 1).padStart(2, '0')}
+                  </span>
+
+                  {/* Top: language + arrow */}
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '12px' }}>
+                    {repo.language && (
+                      <span style={{
+                        fontFamily: "'Inter', sans-serif", fontSize: '9px',
+                        letterSpacing: '0.15em', textTransform: 'uppercase',
+                        color: langColor, background: `${langColor}18`,
+                        padding: '3px 8px', border: `1px solid ${langColor}40`,
+                      }}>
+                        {repo.language}
+                      </span>
+                    )}
+                    <span className="material-symbols-outlined" style={{
+                      fontSize: '18px',
+                      color: isHovered ? '#FFB3AE' : '#3b3333',
+                      transition: 'color 300ms, transform 300ms',
+                      transform: isHovered ? 'translate(2px,-2px)' : 'translate(0,0)',
+                    }}>
+                      north_east
+                    </span>
+                  </div>
+
+                  {/* Repo name */}
+                  <h3 style={{
+                    fontFamily: "'Epilogue', sans-serif", fontWeight: 700,
+                    fontSize: 'clamp(0.9rem, 1.5vw, 1.1rem)',
+                    color: isHovered ? '#FFB3AE' : '#eedfdf',
+                    textTransform: 'uppercase', letterSpacing: '0.03em',
+                    margin: '0 0 8px', transition: 'color 300ms',
+                    position: 'relative', zIndex: 1,
+                  }}>
+                    {repo.name}
+                  </h3>
+
+                  {/* Description */}
+                  {repo.description && (
+                    <p style={{
+                      fontFamily: "'Inter', sans-serif", fontSize: '12px',
+                      color: '#c6c6c7', margin: '0 0 12px', lineHeight: 1.6,
+                      display: '-webkit-box', WebkitLineClamp: 2,
+                      WebkitBoxOrient: 'vertical', overflow: 'hidden',
+                      position: 'relative', zIndex: 1,
+                    }}>
+                      {repo.description}
+                    </p>
+                  )}
+
+                  {/* Bottom: "VIEW PROJECT" reveal */}
+                  <div style={{
+                    overflow: 'hidden',
+                    height: isHovered ? '28px' : '0px',
+                    transition: 'height 300ms cubic-bezier(0.16,1,0.3,1)',
+                    position: 'relative', zIndex: 1,
+                  }}>
+                    <span style={{
+                      display: 'inline-block',
+                      fontFamily: "'Epilogue', sans-serif", fontWeight: 900,
+                      fontSize: '10px', letterSpacing: '0.25em',
+                      textTransform: 'uppercase', color: '#181212',
+                      background: '#FFB3AE', padding: '4px 12px',
+                      transform: isHovered ? 'translateY(0)' : 'translateY(100%)',
+                      transition: 'transform 300ms cubic-bezier(0.16,1,0.3,1) 50ms',
+                    }}>
+                      VIEW PROJECT →
+                    </span>
+                  </div>
+                </a>
+              );
+            })}
           </div>
         )}
       </div>
+      <style>{`
+        @keyframes shimmer {
+          0%, 100% { opacity: 0.4; }
+          50% { opacity: 0.7; }
+        }
+      `}</style>
     </section>
   );
 };
