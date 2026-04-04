@@ -35,7 +35,10 @@ export const WorkPanel: React.FC<WorkPanelProps> = ({ onNavigate }) => {
     <section className="w-screen h-screen flex-shrink-0 overflow-y-auto bg-[#181212]">
       <div className="px-8 md:px-16 pt-32 pb-24 max-w-7xl mx-auto">
         <div className="flex justify-between items-end mb-24">
-          <h2 className="text-7xl font-headline font-black uppercase text-[#FFB3AE] leading-none whitespace-pre-line">
+          <h2
+            className="font-headline font-black uppercase text-[#FFB3AE] leading-none whitespace-pre-line"
+            style={{ fontSize: 'clamp(2.5rem, 6vw, 4.5rem)' }}
+          >
             {'Selected\nWorks'}
           </h2>
           <span className="font-headline font-bold tracking-widest text-[#c6c6c7]">

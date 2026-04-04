@@ -12,144 +12,154 @@ export const HeroPanel: React.FC<HeroPanelProps> = ({ onNavigate }) => {
 
   return (
     <section
-      className="w-screen h-screen flex-shrink-0 overflow-hidden relative bg-[#181212] flex flex-col"
+      className="w-screen h-screen flex-shrink-0 overflow-hidden relative bg-[#181212]"
       style={{ maxWidth: '100vw', maxHeight: '100vh' }}
     >
-      {/* Background blobs */}
-      <div className="absolute top-0 right-0 w-1/2 h-[600px] bg-[#8D1515]/10 blur-[120px] pointer-events-none -z-10" />
-      <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-[#930616]/15 blur-[120px] pointer-events-none -z-10" />
+      {/* Ambient blobs — decorative only */}
+      <div
+        className="absolute top-0 right-0 pointer-events-none -z-10"
+        style={{ width: '50%', height: '60%', background: 'radial-gradient(ellipse at top right, rgba(141,21,21,0.18) 0%, transparent 70%)' }}
+      />
+      <div
+        className="absolute bottom-0 left-0 pointer-events-none -z-10"
+        style={{ width: '40%', height: '50%', background: 'radial-gradient(ellipse at bottom left, rgba(147,6,22,0.12) 0%, transparent 70%)' }}
+      />
 
-      {/* ── MAIN LAYOUT: 2-row grid ── */}
-      <div className="relative z-10 flex flex-col h-full px-8 md:px-16 pt-24 pb-8">
+      {/*
+        LAYOUT: full-height flex column, split into 3 rows.
+        - Row A (flex-1): Headline left + tagline right — fills available space
+        - Row B (fixed): Bottom bar with role, socials, scroll hint
+        No min-h-screen, no gap-12, no absolute words overflowing.
+      */}
+      <div className="relative z-10 h-full flex flex-col px-6 sm:px-10 md:px-16 lg:px-20">
 
-        {/* ROW 1 — Headline + description side by side */}
-        <div className="flex items-start justify-between flex-1 min-h-0">
+        {/* ── SPACER: top nav clearance ── */}
+        <div className="h-20 sm:h-24 flex-shrink-0" />
 
-          {/* LEFT: Big headline */}
-          <div className="flex flex-col justify-center flex-1 min-w-0">
+        {/* ── ROW A: Headline + description ── fills remaining space above bottom bar */}
+        <div className="flex-1 flex flex-col justify-center min-h-0 overflow-hidden">
+
+          {/* Name headline */}
+          <div
+            className="hero-animate"
+            style={{ animationDelay: '80ms' }}
+          >
             <h1
-              className="font-black font-headline uppercase leading-[0.82] tracking-tighter text-[#8D1515] hero-animate"
-              style={{
-                fontSize: 'clamp(3.5rem, 11vw, 11rem)',
-                animationDelay: '100ms',
-              }}
+              className="font-black font-headline uppercase tracking-tighter text-[#8D1515] leading-[0.82]"
+              style={{ fontSize: 'clamp(3rem, 10vw, 10rem)' }}
             >
               RAUNAK
             </h1>
-            <h1
-              className="font-black font-headline uppercase leading-[0.82] tracking-tighter text-[#FFB3AE] relative hero-animate"
-              style={{
-                fontSize: 'clamp(3.5rem, 11vw, 11rem)',
-                animationDelay: '180ms',
-              }}
-            >
-              SHARMA
+            <div className="relative">
+              <h1
+                className="font-black font-headline uppercase tracking-tighter text-[#FFB3AE] leading-[0.82]"
+                style={{ fontSize: 'clamp(3rem, 10vw, 10rem)' }}
+              >
+                SHARMA
+              </h1>
+              {/* Version badge — top-right of SHARMA, hidden on tiny screens */}
               <span
-                className="absolute font-label text-[#ffb4ab]"
-                style={{
-                  fontSize: 'clamp(8px, 1vw, 11px)',
-                  letterSpacing: '0.45em',
-                  top: '8px',
-                  right: 0,
-                }}
+                className="absolute top-0 right-0 hidden sm:block font-label text-[#ffb4ab]"
+                style={{ fontSize: '0.6rem', letterSpacing: '0.5em', lineHeight: 1, top: '4px' }}
               >
                 V.01-2026
               </span>
-            </h1>
+            </div>
           </div>
 
-          {/* RIGHT: Description */}
+          {/* Tagline — below headline on mobile, right-aligned on desktop */}
           <div
-            className="hidden md:flex flex-col justify-center ml-8 hero-animate"
-            style={{
-              maxWidth: '320px',
-              minWidth: '220px',
-              animationDelay: '260ms',
-            }}
+            className="mt-6 sm:mt-8 hero-animate"
+            style={{ animationDelay: '180ms', maxWidth: '520px' }}
           >
             <p
               className="font-body leading-relaxed text-[#c6c6c7]"
               style={{
-                fontSize: 'clamp(0.85rem, 1.2vw, 1.1rem)',
+                fontSize: 'clamp(0.8rem, 1.4vw, 1rem)',
                 borderLeft: '3px solid #8D1515',
-                paddingLeft: '20px',
-                paddingTop: '12px',
-                paddingBottom: '12px',
+                paddingLeft: '16px',
+                paddingTop: '10px',
+                paddingBottom: '10px',
               }}
             >
-              A frontend engineer building high-fidelity editorial interfaces.
-              Dismantling the template aesthetic through raw geometry and visceral
-              interactions.
+              A full-stack developer building high-fidelity editorial interfaces
+              and robust backend systems. Dismantling the template aesthetic
+              through raw geometry, visceral interactions, and clean architecture.
             </p>
+          </div>
+
+          {/* Decorative rotated words strip — constrained height, clipped */}
+          <div
+            className="relative mt-auto overflow-hidden hero-animate flex-shrink-0"
+            style={{
+              height: 'clamp(60px, 12vh, 130px)',
+              animationDelay: '280ms',
+              pointerEvents: 'none',
+              userSelect: 'none',
+            }}
+          >
+            {/* DESIGN — outline left */}
+            <span
+              className="absolute font-black font-headline uppercase text-stroke-red"
+              style={{
+                fontSize: 'clamp(2.5rem, 7vw, 8rem)',
+                transform: 'rotate(-9deg)',
+                bottom: '-10%',
+                left: '-1%',
+                lineHeight: 1,
+                whiteSpace: 'nowrap',
+              }}
+            >
+              DESIGN
+            </span>
+
+            {/* CODE — pink centre */}
+            <span
+              className="absolute font-black font-headline uppercase text-[#FFB3AE]"
+              style={{
+                fontSize: 'clamp(2.5rem, 7vw, 8rem)',
+                transform: 'rotate(5deg)',
+                bottom: '-5%',
+                left: '28%',
+                lineHeight: 1,
+                whiteSpace: 'nowrap',
+              }}
+            >
+              CODE
+            </span>
+
+            {/* BUILD — dark red right */}
+            <span
+              className="absolute font-black font-headline uppercase text-[#8D1515]"
+              style={{
+                fontSize: 'clamp(2rem, 5.5vw, 6.5rem)',
+                transform: 'rotate(-3deg)',
+                bottom: '-5%',
+                right: '1%',
+                lineHeight: 1,
+                whiteSpace: 'nowrap',
+                opacity: 0.6,
+              }}
+            >
+              BUILD
+            </span>
           </div>
         </div>
 
-        {/* ROW 2 — Rotated words strip */}
+        {/* ── ROW B: Bottom bar — fixed height, always visible ── */}
         <div
-          className="relative flex items-end overflow-hidden hero-animate"
-          style={{
-            height: 'clamp(100px, 18vh, 220px)',
-            animationDelay: '340ms',
-          }}
+          className="flex-shrink-0 flex items-end justify-between pb-6 sm:pb-8 hero-animate"
+          style={{ animationDelay: '380ms', minHeight: '64px' }}
         >
-          {/* DESIGN — outline, rotated */}
-          <h2
-            className="absolute font-black font-headline uppercase text-stroke-red select-none pointer-events-none"
-            style={{
-              fontSize: 'clamp(3rem, 8vw, 9rem)',
-              transform: 'rotate(-10deg)',
-              bottom: '10%',
-              left: '-1%',
-              lineHeight: 1,
-            }}
-          >
-            DESIGN
-          </h2>
-
-          {/* CODE — pink, center */}
-          <h2
-            className="absolute font-black font-headline uppercase text-[#FFB3AE] select-none pointer-events-none"
-            style={{
-              fontSize: 'clamp(3rem, 8vw, 9rem)',
-              transform: 'rotate(5deg)',
-              bottom: '5%',
-              left: '30%',
-              lineHeight: 1,
-              mixBlendMode: 'difference',
-            }}
-          >
-            CODE
-          </h2>
-
-          {/* CREATE — dark red, right */}
-          <h2
-            className="absolute font-black font-headline uppercase text-[#8D1515] select-none pointer-events-none"
-            style={{
-              fontSize: 'clamp(2.5rem, 6.5vw, 7.5rem)',
-              transform: 'rotate(-2deg)',
-              bottom: '5%',
-              right: '2%',
-              lineHeight: 1,
-              opacity: 0.7,
-            }}
-          >
-            CREATE
-          </h2>
-        </div>
-
-        {/* ROW 3 — Bottom bar: role + socials */}
-        <div
-          className="flex items-end justify-between pb-2 pt-2 hero-animate"
-          style={{ animationDelay: '420ms', flexShrink: 0 }}
-        >
+          {/* Left: role + socials */}
           <div>
             <p
-              className="font-label uppercase text-[#FFB3AE] mb-2"
-              style={{ fontSize: 'clamp(8px, 1vw, 11px)', letterSpacing: '0.5em' }}
+              className="font-label uppercase text-[#FFB3AE] mb-2 sm:mb-3"
+              style={{ fontSize: 'clamp(7px, 1vw, 10px)', letterSpacing: '0.45em' }}
             >
-              FRONTEND ENGINEER &amp; UI DESIGNER
+              FULL-STACK DEVELOPER &amp; UI DESIGNER
             </p>
-            <div className="flex gap-4 md:gap-6">
+            <div className="flex flex-wrap gap-4 sm:gap-6">
               {[
                 { label: 'GITHUB ↗', href: 'https://github.com/RoNnY125-coder' },
                 { label: 'LINKEDIN ↗', href: 'https://www.linkedin.com/in/raunak-sharma-b91650344' },
@@ -161,7 +171,7 @@ export const HeroPanel: React.FC<HeroPanelProps> = ({ onNavigate }) => {
                   target="_blank"
                   rel="noopener noreferrer"
                   className="font-headline font-bold uppercase text-[#c6c6c7] hover:text-[#FFB3AE] transition-colors"
-                  style={{ fontSize: 'clamp(8px, 0.9vw, 11px)', letterSpacing: '0.2em' }}
+                  style={{ fontSize: 'clamp(7px, 0.85vw, 10px)', letterSpacing: '0.2em' }}
                 >
                   {link.label}
                 </a>
@@ -169,15 +179,18 @@ export const HeroPanel: React.FC<HeroPanelProps> = ({ onNavigate }) => {
             </div>
           </div>
 
-          {/* Scroll indicator */}
-          <div className="hidden md:flex items-center gap-2 mb-1">
+          {/* Right: scroll indicator — hidden on mobile */}
+          <div className="hidden sm:flex items-center gap-2 pb-1">
             <span
-              className="font-label text-[#c6c6c7] rotate-90 origin-right"
-              style={{ fontSize: 9, letterSpacing: '0.4em' }}
+              className="font-label text-[#c6c6c7]"
+              style={{ fontSize: '8px', letterSpacing: '0.35em', writingMode: 'vertical-rl' }}
             >
               SCROLL →
             </span>
-            <div className="w-px h-16 bg-[#59413e]/30 relative ml-2">
+            <div
+              className="w-px bg-[#59413e]/30 relative ml-1"
+              style={{ height: 'clamp(40px, 8vh, 80px)' }}
+            >
               <div className="absolute top-0 left-0 w-full h-1/3 bg-[#8D1515] animate-pulse" />
             </div>
           </div>

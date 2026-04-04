@@ -12,9 +12,11 @@ html, body {
   padding: 0;
   background-color: #181212;
   color: #eedfdf;
-  overflow: hidden; /* KEY: panels control scroll, not the body */
-  cursor: crosshair; /* Stitch signature */
+  overflow: hidden;
+  overscroll-behavior: none;
+  cursor: crosshair;
   font-family: 'Inter', sans-serif;
+  -webkit-font-smoothing: antialiased;
 }
 
 ::selection {
@@ -22,26 +24,12 @@ html, body {
   color: #ffb3ae;
 }
 
-/* ── Scrollbar (for panel-level overflow-y-auto) ── */
+/* ── Scrollbar ── */
 ::-webkit-scrollbar { width: 2px; height: 2px; }
 ::-webkit-scrollbar-track { background: #181212; }
 ::-webkit-scrollbar-thumb { background: #8D1515; }
 
-/* ── Typography utilities ── */
-.text-huge {
-  font-size: clamp(4rem, 15vw, 12rem);
-  line-height: 0.85;
-}
-.text-display {
-  font-size: clamp(4rem, 15vw, 14rem);
-  line-height: 0.85;
-}
-.vertical-text {
-  writing-mode: vertical-rl;
-  text-orientation: mixed;
-}
-
-/* ── Text stroke (for "DESIGN" word in hero) ── */
+/* ── Text stroke (DESIGN word in hero) ── */
 .text-stroke-red {
   -webkit-text-stroke: 1.5px #8D1515;
   color: transparent;
@@ -51,19 +39,25 @@ html, body {
   color: #8D1515;
 }
 
-/* ── Hero entry animations ── */
+/* ── Writing modes ── */
+.vertical-text {
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+}
+
+/* ── Hero entry animation ── */
 @keyframes heroFadeUp {
-  from { opacity: 0; transform: translateY(30px); }
+  from { opacity: 0; transform: translateY(28px); }
   to   { opacity: 1; transform: translateY(0); }
 }
 .hero-animate {
   animation: heroFadeUp 600ms cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
-/* ── Scroll-reveal (for within-panel content) ── */
+/* ── Scroll-reveal ── */
 .reveal {
   opacity: 0;
-  transform: translateY(40px);
+  transform: translateY(30px);
   transition: opacity 600ms ease, transform 600ms ease;
 }
 .reveal.is-visible {
@@ -71,7 +65,7 @@ html, body {
   transform: translateY(0);
 }
 
-/* ── Clip-path masks (Stitch blob masks) ── */
+/* ── Clip-path masks ── */
 .mask-blob-1 { clip-path: polygon(10% 0%, 100% 10%, 90% 100%, 0% 80%); }
 .mask-blob-2 { clip-path: polygon(0% 15%, 85% 0%, 100% 85%, 15% 100%); }
 .editorial-mask { clip-path: polygon(10% 0, 100% 0%, 90% 100%, 0% 100%); }
@@ -83,10 +77,8 @@ html, body {
   will-change: transform;
 }
 
-/* ── Nav underline effect ── */
-.nav-link-stitch {
-  position: relative;
-}
+/* ── Nav underline ── */
+.nav-link-stitch { position: relative; }
 .nav-link-stitch::after {
   content: '';
   display: block;
@@ -101,7 +93,7 @@ html, body {
 .nav-link-stitch:hover::after { width: 50%; }
 .nav-link-stitch.active::after { width: 100%; }
 
-/* ── Tailwind CSS variable overrides for Obsidian Ember ── */
+/* ── CSS variable overrides ── */
 @layer base {
   :root {
     --background: 8 18% 9%;
@@ -123,22 +115,10 @@ html, body {
   }
 }
 
-/* ── Archive panel slide-in ── */
-.archive-panel-enter {
-  transform: translateX(100%);
-}
-.archive-panel-enter-active {
-  transform: translateX(0);
-  transition: transform 600ms cubic-bezier(0.16, 1, 0.3, 1);
-}
+/* ── Mobile: prevent tap highlight ── */
+* { -webkit-tap-highlight-color: transparent; }
 
-/* ── Horizontal scroll track (no scrollbar visible on webkit) ── */
-.h-scroll-track::-webkit-scrollbar {
-  height: 2px;
-}
-.h-scroll-track::-webkit-scrollbar-track {
-  background: #181212;
-}
-.h-scroll-track::-webkit-scrollbar-thumb {
-  background: #8D1515;
-}
+/* ── Archive horizontal track scrollbar ── */
+.h-scroll-track::-webkit-scrollbar { height: 2px; }
+.h-scroll-track::-webkit-scrollbar-track { background: #181212; }
+.h-scroll-track::-webkit-scrollbar-thumb { background: #8D1515; }

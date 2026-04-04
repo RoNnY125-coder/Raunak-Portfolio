@@ -29,18 +29,11 @@ export const ContactPanel: React.FC = () => {
       <div className="relative z-10 px-8 md:px-24 pt-32 pb-16 w-full flex flex-col items-center min-h-screen">
         {/* Giant headline — "Let's Build the Future" */}
         <div className="w-full mb-12">
-          <h2 style={{
-            fontFamily: "'Epilogue', sans-serif",
-            fontWeight: 900,
-            fontSize: 'clamp(3.5rem, 14vw, 13rem)',
-            lineHeight: 0.85,
-            color: '#ffdad7',
-            textTransform: 'uppercase',
-            letterSpacing: '-0.02em',
-            textAlign: 'center',
-          }}>
-            LET'S BUILD<br />
-            <span style={{ color: '#181212', WebkitTextStroke: '2px #ffdad7' }}>THE FUTURE.</span>
+          <h2
+            className="font-headline font-black text-[#ffdad7] uppercase tracking-tighter text-center leading-[0.85] mb-10 sm:mb-16"
+            style={{ fontSize: 'clamp(2.8rem, 10vw, 9rem)' }}
+          >
+            LET'S BUILD<br />THE FUTURE.
           </h2>
         </div>
 
