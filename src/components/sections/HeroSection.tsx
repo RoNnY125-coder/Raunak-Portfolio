@@ -1,6 +1,4 @@
 import { motion } from "framer-motion";
-import { ArrowDown, Download, Github, Linkedin, Instagram } from "lucide-react";
-import { Button } from "@/components/ui/button";
 
 export function HeroSection() {
   const scrollToProjects = () => {
@@ -10,20 +8,21 @@ export function HeroSection() {
   return (
     <section
       id="home"
-      className="relative flex min-h-screen items-center justify-center overflow-hidden px-6 pt-16 lg:pl-20 lg:pt-0"
+      className="relative flex min-h-screen items-center justify-start overflow-hidden px-6 lg:px-16 pt-24 pb-12"
     >
-      {/* Background effects */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_0%,hsl(0,85%,60%,0.12),transparent_60%)]" />
-      <div className="absolute right-0 top-1/4 h-96 w-96 rounded-full bg-primary/5 blur-3xl" />
-      <div className="absolute bottom-1/4 left-0 h-64 w-64 rounded-full bg-primary/5 blur-3xl" />
-
-      <div className="relative z-10 mx-auto max-w-4xl text-center">
+      {/* Background ghost elements */}
+      <div className="ghost-num top-20 right-10">01</div>
+      
+      <div className="relative z-10 max-w-5xl">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
         >
-          <span className="mb-4 inline-block rounded-full border border-primary/30 bg-primary/10 px-4 py-1.5 text-sm font-medium text-primary">
+          <span 
+            className="mb-6 inline-block text-xs font-medium uppercase tracking-[0.4em] text-[#8D1515]"
+            style={{ fontFamily: "'Inter', sans-serif" }}
+          >
             Available for opportunities
           </span>
         </motion.div>
@@ -31,106 +30,67 @@ export function HeroSection() {
         <motion.h1
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.1 }}
-          className="mb-5 font-heading text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl lg:text-7xl"
+          transition={{ duration: 0.8, delay: 0.1 }}
+          className="mb-8 font-black text-6xl md:text-8xl lg:text-[10rem] uppercase leading-[0.85] tracking-tighter text-[#eedfdf]"
+          style={{ fontFamily: "'Epilogue', sans-serif" }}
         >
-          Hi, I'm{" "}
-          <span className="text-gradient glow-text">Raunak Sharma</span>
+          RAUNAK<br />
+          <span className="text-gradient">SHARMA</span>
         </motion.h1>
 
         <motion.p
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.2 }}
-          className="mb-4 font-heading text-xl font-medium text-foreground/90 sm:text-2xl"
+          className="mb-8 font-black text-xl md:text-3xl uppercase tracking-widest text-[#FFB3AE]"
+          style={{ fontFamily: "'Epilogue', sans-serif" }}
         >
-          Frontend Developer & UI/UX Designer
+          Frontend Developer &amp; UI/UX Designer
         </motion.p>
 
         <motion.p
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.3 }}
-          className="mx-auto mb-10 max-w-2xl text-lg text-muted-foreground"
+          className="max-w-xl mb-12 text-lg md:text-xl text-[#c6c6c7] leading-relaxed"
+          style={{ fontFamily: "'Inter', sans-serif" }}
         >
-          I craft clean, scalable, and user-focused interfaces that bridge the gap between beautiful design and robust engineering.
+          I craft clean, scalable, and user-focused interfaces that bridge the gap between beautiful design and robust engineering. Dismantling the template aesthetic through raw geometry.
         </motion.p>
 
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.4 }}
-          className="mb-12 flex flex-wrap items-center justify-center gap-4"
+          className="flex flex-wrap items-center gap-8"
         >
-          <Button
-            size="lg"
+          <button
             onClick={scrollToProjects}
-            className="gap-2 transition-transform duration-300 hover:-translate-y-1 hover:shadow-lg"
+            className="bg-[#8d1515] hover:bg-[#ffb3ae] text-[#ffb3ae] hover:text-[#68000b] px-10 py-5 font-black uppercase text-sm tracking-widest transition-all duration-300"
+            style={{ fontFamily: "'Epilogue', sans-serif" }}
           >
-            View Projects
-            <ArrowDown className="h-4 w-4" />
-          </Button>
-          {/* Replace /resume.pdf with your actual hosted resume URL */}
-          <a href="/resume.pdf" target="_blank" rel="noopener noreferrer">
-            <Button
-              size="lg"
-              variant="outline"
-              className="gap-2 transition-transform duration-300 hover:-translate-y-1 hover:shadow-lg"
-            >
-              <Download className="h-4 w-4" />
-              Download Resume
-            </Button>
-          </a>
-        </motion.div>
-
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.6, delay: 0.5 }}
-          className="flex items-center justify-center gap-4"
-        >
-          <a
-            href="https://github.com/RoNnY125-coder"
-            target="_blank"
+            VIEW PROJECTS
+          </button>
+          
+          <a 
+            href="/resume.pdf" 
+            target="_blank" 
             rel="noopener noreferrer"
-            className="flex h-11 w-11 items-center justify-center rounded-full border border-border bg-card/50 text-muted-foreground transition-all duration-300 hover:-translate-y-1 hover:border-primary/50 hover:shadow-lg hover:text-primary"
+            className="nav-link-el font-black uppercase text-sm tracking-widest text-[#FFB3AE]"
+            style={{ fontFamily: "'Epilogue', sans-serif" }}
           >
-            <Github className="h-5 w-5" />
-          </a>
-          <a
-            href="https://www.linkedin.com/in/raunak-sharma-b91650344"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex h-11 w-11 items-center justify-center rounded-full border border-border bg-card/50 text-muted-foreground transition-all duration-300 hover:-translate-y-1 hover:border-primary/50 hover:shadow-lg hover:text-primary"
-          >
-            <Linkedin className="h-5 w-5" />
-          </a>
-          <a
-            href="https://www.instagram.com/basically._.raunak?igsh=MXNrNDd0bzRkcjl5MQ=="
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex h-11 w-11 items-center justify-center rounded-full border border-border bg-card/50 text-muted-foreground transition-all duration-300 hover:-translate-y-1 hover:border-primary/50 hover:shadow-lg hover:text-primary"
-          >
-            <Instagram className="h-5 w-5" />
+            DOWNLOAD RESUME
           </a>
         </motion.div>
       </div>
 
-      {/* Scroll indicator */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1 }}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 lg:left-[calc(50%+40px)]"
-      >
-        <motion.div
-          animate={{ y: [0, 10, 0] }}
-          transition={{ duration: 2, repeat: Infinity }}
-          className="flex h-14 w-8 items-start justify-center rounded-full border border-border/50 p-2 animate-glow-pulse"
-        >
-          <motion.div className="h-2 w-1 rounded-full bg-primary" />
-        </motion.div>
-      </motion.div>
+      {/* Vertical social bar */}
+      <div className="absolute right-8 bottom-12 hidden lg:flex flex-col items-center gap-8 text-[#3B3333]">
+        <a href="https://github.com/RoNnY125-coder" target="_blank" className="hover:text-[#8D1515] transition-colors"><i className="material-symbols-outlined text-lg">code</i></a>
+        <a href="https://www.linkedin.com/in/raunak-sharma-b91650344" target="_blank" className="hover:text-[#8D1515] transition-colors"><i className="material-symbols-outlined text-lg">link</i></a>
+        <a href="https://www.instagram.com/basically._.raunak" target="_blank" className="hover:text-[#8D1515] transition-colors"><i className="material-symbols-outlined text-lg">share</i></a>
+        <div className="w-[1px] h-16 bg-[#3B3333]" />
+      </div>
     </section>
   );
 }

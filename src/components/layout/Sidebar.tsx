@@ -1,73 +1,56 @@
+import React from 'react';
+
 interface SidebarProps {
-  activeSection: string;
+  currentPanel: number;
+  onNavigate: (index: number) => void;
   onArchiveOpen: () => void;
+  archiveOpen?: boolean;
 }
 
-const sideIcons = [
-  { id: "projects", icon: "grid_view", href: "#projects", isArchive: false },
-  { id: "archive", icon: "folder_open", href: null, isArchive: true },
-  { id: "about", icon: "auto_stories", href: "#about", isArchive: false },
-  { id: "contact", icon: "alternate_email", href: "#contact", isArchive: false },
-];
-
-export function Sidebar({ activeSection, onArchiveOpen }: SidebarProps) {
-  const handleClick = (item: (typeof sideIcons)[number]) => {
-    if (item.isArchive) {
-      onArchiveOpen();
-      return;
-    }
-    if (item.href) {
-      const el = document.querySelector(item.href);
-      el?.scrollIntoView({ behavior: "smooth" });
-    }
-  };
-
+export const Sidebar: React.FC<SidebarProps> = ({ currentPanel, onNavigate, onArchiveOpen, archiveOpen }) => {
   return (
-    <aside className="hidden lg:flex fixed left-0 top-0 w-24 h-full bg-[#181212] z-40 flex-col items-center justify-between py-8 border-r border-[#251e1e]">
-      {/* Top brand */}
-      <div className="flex flex-col items-center gap-2">
-        <span
-          className="font-black text-[#FFB3AE] text-lg"
-          style={{ fontFamily: "'Epilogue', sans-serif" }}
+    <aside className="fixed left-0 top-0 h-full w-24 z-40 bg-[#181212] hidden lg:flex flex-col items-center py-12">
+      <div className="flex flex-col items-center">
+        <span className="text-xl font-black text-[#8D1515] font-headline">RS</span>
+        <span className="text-[10px] tracking-widest text-[#FFB3AE] rotate-180 vertical-text mt-4">V.01</span>
+      </div>
+
+      <div className="flex flex-col gap-16 flex-grow justify-center">
+        <span 
+          onClick={() => onNavigate(1)}
+          className={`material-symbols-outlined transition-all duration-500 ease-in-out cursor-pointer ${
+            currentPanel === 1 && !archiveOpen ? 'text-[#FFB3AE] scale-110' : 'text-[#3B3333] hover:text-[#8D1515]'
+          }`}
         >
-          RS
+          grid_view
         </span>
-        <span className="vertical-text text-[10px] tracking-[0.3em] uppercase text-[#8D1515] mt-4">
-          V.01
+        <span 
+          onClick={onArchiveOpen}
+          className={`material-symbols-outlined transition-all duration-500 ease-in-out cursor-pointer ${
+            archiveOpen ? 'text-[#FFB3AE] scale-110' : 'text-[#3B3333] hover:text-[#8D1515]'
+          }`}
+        >
+          folder_open
+        </span>
+        <span 
+          onClick={() => onNavigate(2)}
+          className={`material-symbols-outlined transition-all duration-500 ease-in-out cursor-pointer ${
+            currentPanel === 2 && !archiveOpen ? 'text-[#FFB3AE] scale-110' : 'text-[#3B3333] hover:text-[#8D1515]'
+          }`}
+        >
+          auto_stories
+        </span>
+        <span 
+          onClick={() => onNavigate(3)}
+          className={`material-symbols-outlined transition-all duration-500 ease-in-out cursor-pointer ${
+            currentPanel === 3 && !archiveOpen ? 'text-[#FFB3AE] scale-110' : 'text-[#3B3333] hover:text-[#8D1515]'
+          }`}
+        >
+          alternate_email
         </span>
       </div>
 
-      {/* Middle icons */}
-      <div className="flex flex-col items-center gap-8">
-        {sideIcons.map((item) => {
-          const isActive = item.id === activeSection;
-          return (
-            <button
-              key={item.id}
-              onClick={() => handleClick(item)}
-              className={`transition-all duration-500 ease-in-out ${
-                isActive
-                  ? "text-[#FFB3AE] scale-110"
-                  : "text-[#3B3333] hover:text-[#8D1515] hover:scale-110"
-              }`}
-            >
-              <span className="material-symbols-outlined text-2xl">
-                {item.icon}
-              </span>
-            </button>
-          );
-        })}
-      </div>
-
-      {/* Bottom portrait placeholder */}
-      <div className="w-10 h-10 bg-[#3b3333] flex items-center justify-center">
-        <span
-          className="text-xs text-[#c6c6c7] font-black"
-          style={{ fontFamily: "'Epilogue', sans-serif" }}
-        >
-          R
-        </span>
-      </div>
+      <div className="w-10 h-10 bg-[#3b3333]"></div>
     </aside>
   );
-}
+};

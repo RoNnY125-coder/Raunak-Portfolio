@@ -1,15 +1,11 @@
 import { motion, useInView } from "framer-motion";
 import { useRef, useState } from "react";
-import { Send, Github, Linkedin, Instagram, Mail, MapPin, ArrowUpRight } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 
 const socialLinks = [
-  { name: "GitHub", icon: Github, href: "https://github.com/RoNnY125-coder" },
-  { name: "LinkedIn", icon: Linkedin, href: "https://www.linkedin.com/in/raunak-sharma-b91650344" },
-  { name: "Instagram", icon: Instagram, href: "https://www.instagram.com/basically._.raunak?igsh=MXNrNDd0bzRkcjl5MQ==" },
+  { name: "GitHub", icon: "code", href: "https://github.com/RoNnY125-coder" },
+  { name: "LinkedIn", icon: "link", href: "https://www.linkedin.com/in/raunak-sharma-b91650344" },
+  { name: "Instagram", icon: "share", href: "https://www.instagram.com/basically._.raunak" },
 ];
 
 const GEMINI_API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
@@ -76,14 +72,11 @@ async function generateEmails(name: string, email: string, message: string) {
 
   const data = await res.json();
   const rawText: string = data.candidates[0].content.parts[0].text;
-
-  // Strip any accidental markdown fences Gemini might add
   const cleaned = rawText.replace(/^```(?:json)?\s*/i, "").replace(/\s*```$/, "").trim();
   return JSON.parse(cleaned);
 }
 
 async function sendEmail(to: string, subject: string, body: string) {
-  // Calls our own server-side API route — keeps the Resend key out of the browser bundle
   const res = await fetch("/api/send-email", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -112,13 +105,8 @@ export function ContactSection() {
     const message = formData.get("message") as string;
 
     try {
-      // 1. Ask Gemini to draft both emails
       const emails = await generateEmails(name, email, message);
-
-      // 2. Deliver auto-reply to the visitor
       await sendEmail(email, emails.visitor_reply.subject, emails.visitor_reply.body);
-
-      // 3. Deliver briefing summary to Raunak
       await sendEmail("raunaksh75@gmail.com", emails.owner_summary.subject, emails.owner_summary.body);
 
       toast({
@@ -139,168 +127,153 @@ export function ContactSection() {
   };
 
   return (
-    <section id="contact" className="relative py-24 lg:pl-20">
-      <div className="container mx-auto px-6">
+    <section id="contact" className="relative py-32 lg:pl-24 px-6 lg:px-16 overflow-hidden">
+      {/* Ghost number */}
+      <div className="ghost-num top-0 right-0">07</div>
+
+      <div className="max-w-6xl relative z-10">
         <motion.div
-          ref={ref}
-          initial={{ opacity: 0, y: 40 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6 }}
-          className="mb-16 text-center"
+           ref={ref}
+           initial={{ opacity: 0, y: 40 }}
+           animate={isInView ? { opacity: 1, y: 0 } : {}}
+           transition={{ duration: 0.6 }}
+           className="mb-16"
         >
-          <span className="mb-3 inline-block text-sm font-medium uppercase tracking-wider text-primary">
+          <span className="mb-4 inline-block text-xs font-medium uppercase tracking-[0.4em] text-[#8D1515]"
+            style={{ fontFamily: "'Inter', sans-serif" }}>
             Get in Touch
           </span>
-          <h2 className="font-heading text-3xl font-bold sm:text-4xl lg:text-5xl">
-            Let's work together
+          <h2 className="font-black uppercase tracking-tighter text-4xl lg:text-7xl text-[#eedfdf]"
+            style={{ fontFamily: "'Epilogue', sans-serif" }}>
+            LET'S CONSTRUCT<br />
+            <span className="text-gradient">SOMETHING TOGETHER</span>
           </h2>
-          <p className="mx-auto mt-4 max-w-2xl text-lg text-muted-foreground">
-            Have a project in mind or just want to say hello? I'd love to hear from you.
-          </p>
         </motion.div>
 
-        <div className="mx-auto max-w-5xl">
-          <div className="grid gap-12 lg:grid-cols-5">
-            {/* Contact Info */}
-            <motion.div
-              initial={{ opacity: 0, x: -30 }}
-              animate={isInView ? { opacity: 1, x: 0 } : {}}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              className="space-y-8 lg:col-span-2"
-            >
-              <div>
-                <h3 className="mb-6 font-heading text-xl font-semibold">Contact Info</h3>
-                <div className="space-y-4">
-                  <div className="flex items-center gap-4">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
-                      <Mail className="h-5 w-5 text-primary" />
-                    </div>
-                    <div>
-                      <p className="text-sm text-muted-foreground">Email</p>
-                      <a href="mailto:raunaksh75@gmail.com" className="font-medium hover:text-primary">
-                        raunaksh75@gmail.com
-                      </a>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-4">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
-                      <MapPin className="h-5 w-5 text-primary" />
-                    </div>
-                    <div>
-                      <p className="text-sm text-muted-foreground">Location</p>
-                      <p className="font-medium">Delhi, India</p>
-                    </div>
-                  </div>
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-24">
+          <motion.div
+            initial={{ opacity: 0, x: -40 }}
+            animate={isInView ? { opacity: 1, x: 0 } : {}}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="lg:col-span-5 space-y-12"
+          >
+            <div className="space-y-6">
+              <p className="text-[#c6c6c7] text-lg leading-relaxed">
+                Have a project in mind or just want to say hello? I'm always open to new collaborations and interesting challenges.
+              </p>
+              <div className="space-y-4">
+                <div className="flex items-center gap-6 group">
+                  <span className="material-symbols-outlined text-[#8D1515] text-2xl group-hover:scale-110 transition-transform">mail</span>
+                  <a href="mailto:raunaksh75@gmail.com" className="text-xl font-bold text-[#FFB3AE] hover:text-[#8D1515] transition-colors" style={{ fontFamily: "'Epilogue', sans-serif" }}>
+                    raunaksh75@gmail.com
+                  </a>
+                </div>
+                <div className="flex items-center gap-6">
+                  <span className="material-symbols-outlined text-[#8D1515] text-2xl">location_on</span>
+                  <span className="text-xl font-bold text-[#FFB3AE]" style={{ fontFamily: "'Epilogue', sans-serif" }}>
+                    DELHI, INDIA
+                  </span>
                 </div>
               </div>
+            </div>
 
-              <div>
-                <h3 className="mb-4 font-heading text-lg font-semibold">Connect</h3>
-                <div className="flex gap-3">
-                  {socialLinks.map((social) => {
-                    const Icon = social.icon;
-                    return (
-                      <a
-                        key={social.name}
-                        href={social.href}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="group flex h-12 w-12 items-center justify-center rounded-xl border border-border bg-card transition-all duration-300 hover:-translate-y-1 hover:border-primary/50 hover:bg-primary/10 hover:shadow-lg"
-                      >
-                        <Icon className="h-5 w-5 text-muted-foreground transition-colors group-hover:text-primary" />
-                      </a>
-                    );
-                  })}
-                </div>
+            <div className="space-y-6 pt-6 border-t border-[#251e1e]">
+              <h3 className="font-black uppercase tracking-widest text-[#8D1515] text-xs">SOCIAL CONNECT</h3>
+              <div className="flex gap-8">
+                {socialLinks.map((social) => (
+                  <a
+                    key={social.name}
+                    href={social.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-[#3B3333] hover:text-[#FFB3AE] transition-all duration-300 transform hover:-translate-y-1"
+                  >
+                    <span className="material-symbols-outlined text-3xl">{social.icon}</span>
+                  </a>
+                ))}
               </div>
-            </motion.div>
+            </div>
+          </motion.div>
 
-            {/* Contact Form */}
-            <motion.div
-              initial={{ opacity: 0, x: 30 }}
-              animate={isInView ? { opacity: 1, x: 0 } : {}}
-              transition={{ duration: 0.6, delay: 0.3 }}
-              className="lg:col-span-3"
-            >
-              <form onSubmit={handleSubmit} className="card-glass p-6 lg:p-8">
-                <div className="mb-6 grid gap-6 md:grid-cols-2">
-                  <div>
-                    <label htmlFor="name" className="mb-2 block text-sm font-medium">
-                      Name
-                    </label>
-                    <Input
-                      id="name"
-                      name="name"
-                      placeholder="Your name"
-                      required
-                      className="bg-secondary/50 border-border/50"
-                    />
-                  </div>
-                  <div>
-                    <label htmlFor="email" className="mb-2 block text-sm font-medium">
-                      Email
-                    </label>
-                    <Input
-                      id="email"
-                      name="email"
-                      type="email"
-                      placeholder="your@email.com"
-                      required
-                      className="bg-secondary/50 border-border/50"
-                    />
-                  </div>
-                </div>
-                <div className="mb-6">
-                  <label htmlFor="message" className="mb-2 block text-sm font-medium">
-                    Message
+          <motion.div
+            initial={{ opacity: 0, x: 40 }}
+            animate={isInView ? { opacity: 1, x: 0 } : {}}
+            transition={{ duration: 0.6, delay: 0.3 }}
+            className="lg:col-span-7"
+          >
+            <form onSubmit={handleSubmit} className="bg-[#251e1e] p-8 lg:p-12 space-y-8">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div className="space-y-2">
+                  <label htmlFor="name" className="text-xs uppercase tracking-widest text-[#FFB3AE] font-bold" style={{ fontFamily: "'Inter', sans-serif" }}>
+                    NAME
                   </label>
-                  <Textarea
-                    id="message"
-                    name="message"
-                    placeholder="Tell me about your project..."
+                  <input
+                    id="name"
+                    name="name"
+                    type="text"
                     required
-                    rows={5}
-                    className="bg-secondary/50 border-border/50 resize-none"
+                    placeholder="WALTER WHITE"
+                    className="w-full bg-[#181212] border-none text-[#eedfdf] px-6 py-4 focus:ring-1 focus:ring-[#8D1515] outline-none placeholder-[#3B3333] font-bold uppercase transition-all"
+                    style={{ fontFamily: "'Epilogue', sans-serif" }}
                   />
                 </div>
-                <Button type="submit" size="lg" className="w-full gap-2" disabled={isSubmitting}>
-                  {isSubmitting ? (
-                    "Sending…"
-                  ) : (
-                    <>
-                      Send Message
-                      <Send className="h-4 w-4" />
-                    </>
-                  )}
-                </Button>
-              </form>
-            </motion.div>
-          </div>
+                <div className="space-y-2">
+                  <label htmlFor="email" className="text-xs uppercase tracking-widest text-[#FFB3AE] font-bold" style={{ fontFamily: "'Inter', sans-serif" }}>
+                    EMAIL
+                  </label>
+                  <input
+                    id="email"
+                    name="email"
+                    type="email"
+                    required
+                    placeholder="HEISENBERG@EMPIRE.COM"
+                    className="w-full bg-[#181212] border-none text-[#eedfdf] px-6 py-4 focus:ring-1 focus:ring-[#8D1515] outline-none placeholder-[#3B3333] font-bold uppercase transition-all"
+                    style={{ fontFamily: "'Epilogue', sans-serif" }}
+                  />
+                </div>
+              </div>
+              <div className="space-y-2">
+                <label htmlFor="message" className="text-xs uppercase tracking-widest text-[#FFB3AE] font-bold" style={{ fontFamily: "'Inter', sans-serif" }}>
+                  MESSAGE
+                </label>
+                <textarea
+                  id="message"
+                  name="message"
+                  required
+                  rows={6}
+                  placeholder="I AM THE ONE WHO KNOCKS..."
+                  className="w-full bg-[#181212] border-none text-[#eedfdf] px-6 py-4 focus:ring-1 focus:ring-[#8D1515] outline-none placeholder-[#3B3333] font-bold uppercase transition-all resize-none"
+                  style={{ fontFamily: "'Epilogue', sans-serif" }}
+                />
+              </div>
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                className="w-full bg-[#8D1515] hover:bg-[#FFB3AE] text-[#FFB3AE] hover:text-[#68000b] py-6 font-black uppercase tracking-[0.4em] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                style={{ fontFamily: "'Epilogue', sans-serif" }}
+              >
+                {isSubmitting ? "SENDING..." : "DISPATCH MESSAGE"}
+              </button>
+            </form>
+          </motion.div>
         </div>
       </div>
 
-      {/* Footer */}
-      <motion.footer
-        initial={{ opacity: 0 }}
-        animate={isInView ? { opacity: 1 } : {}}
-        transition={{ delay: 0.6 }}
-        className="mt-24 border-t border-border/50 pt-8"
-      >
-        <div className="container mx-auto px-6">
-          <div className="flex flex-col items-center justify-between gap-4 text-center sm:flex-row sm:text-left">
-            <p className="text-sm text-muted-foreground">
-              © {new Date().getFullYear()} Raunak Sharma. Built with passion.
-            </p>
-            <a
-              href="#home"
-              className="flex items-center gap-1 text-sm text-muted-foreground transition-colors hover:text-primary"
-            >
-              Back to top
-              <ArrowUpRight className="h-4 w-4" />
-            </a>
-          </div>
+      {/* Footer Branding */}
+      <footer className="mt-32 pt-12 border-t border-[#251e1e]">
+        <div className="flex flex-col md:flex-row justify-between items-center gap-8">
+          <span className="font-black text-[#8D1515] italic tracking-tighter text-2xl" style={{ fontFamily: "'Epilogue', sans-serif" }}>
+            RAUNAK.SHARMA
+          </span>
+          <p className="text-[#3B3333] text-xs uppercase tracking-widest font-bold">
+            © {new Date().getFullYear()} — MANUFACTURED IN DELHI
+          </p>
+          <a href="#home" className="group flex items-center gap-2 text-[#FFB3AE] font-black uppercase text-xs tracking-widest" style={{ fontFamily: "'Epilogue', sans-serif" }}>
+            BACK TO TOP
+            <span className="material-symbols-outlined text-sm group-hover:-translate-y-1 transition-transform">arrow_upward</span>
+          </a>
         </div>
-      </motion.footer>
+      </footer>
     </section>
   );
 }

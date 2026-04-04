@@ -1,85 +1,177 @@
-import { useState, useEffect } from "react";
-import { Sidebar } from "@/components/layout/Sidebar";
-import { TopNav } from "@/components/layout/TopNav";
-import { HeroSection } from "@/components/sections/HeroSection";
-import { AboutSection } from "@/components/sections/AboutSection";
-import { SkillsSection } from "@/components/sections/SkillsSection";
-import { ProjectsSection } from "@/components/sections/ProjectsSection";
-import { ExperienceSection } from "@/components/sections/ExperienceSection";
-import { CertificationsSection } from "@/components/sections/CertificationsSection";
-import { ContactSection } from "@/components/sections/ContactSection";
-import { ArchivePanel } from "@/components/sections/ArchivePanel";
+import React, { useState, useEffect, useCallback } from 'react';
+import { TopNav } from '../components/layout/TopNav';
+import { Sidebar } from '../components/layout/Sidebar';
+import { HeroPanel } from '../components/sections/HeroPanel';
+import { WorkPanel } from '../components/sections/WorkPanel';
+import { ManifestoPanel } from '../components/sections/ManifestoPanel';
+import { ContactPanel } from '../components/sections/ContactPanel';
+import ArchivePanel from '../components/sections/ArchivePanel';
 
 const Index = () => {
-  const [activeSection, setActiveSection] = useState("home");
+  const [currentPanel, setCurrentPanel] = useState(0);
+  const [isAnimating, setIsAnimating] = useState(false);
   const [archiveOpen, setArchiveOpen] = useState(false);
+  const totalPanels = 4;
 
-  // IntersectionObserver for active section tracking
+  const goToPanel = useCallback((index: number) => {
+    if (isAnimating || index === currentPanel) return;
+    if (index < 0 || index >= totalPanels) return;
+    setIsAnimating(true);
+    setCurrentPanel(index);
+    setTimeout(() => setIsAnimating(false), 700);
+  }, [isAnimating, currentPanel, totalPanels]);
+
+  // Wheel navigation
   useEffect(() => {
-    const sectionIds = [
-      "home",
-      "projects",
-      "about",
-      "skills",
-      "experience",
-      "certifications",
-      "contact",
-    ];
+    let wheelTimeout: ReturnType<typeof setTimeout>;
 
-    const observers: IntersectionObserver[] = [];
-
-    sectionIds.forEach((id) => {
-      const el = document.getElementById(id);
-      if (!el) return;
-
-      const observer = new IntersectionObserver(
-        ([entry]) => {
-          if (entry.isIntersecting) {
-            setActiveSection(id);
+    const handleWheel = (e: WheelEvent) => {
+      if (archiveOpen) return; // Disable horizontal scroll if archive is open
+      
+      // Let vertical scroll inside panels work normally if they can scroll
+      const target = e.target as HTMLElement;
+      const isScrollable = target.closest('.overflow-y-auto');
+      
+      // Only hijack scroll if we're not inside a vertically scrollable element 
+      // OR if we're at the top/bottom boundary and trying to scroll past it
+      if (isScrollable) {
+        const scrollContainer = target.closest('.overflow-y-auto') as HTMLElement;
+        if (scrollContainer) {
+          const atTop = scrollContainer.scrollTop <= 0;
+          const atBottom = Math.abs(scrollContainer.scrollHeight - scrollContainer.clientHeight - scrollContainer.scrollTop) < 1;
+          
+          if ((e.deltaY < 0 && !atTop) || (e.deltaY > 0 && !atBottom)) {
+            return; // Normal vertical scroll inside panel
           }
-        },
-        { threshold: 0.3 }
-      );
+        }
+      }
 
-      observer.observe(el);
-      observers.push(observer);
-    });
+      e.preventDefault();
+      clearTimeout(wheelTimeout);
+      wheelTimeout = setTimeout(() => {
+        if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) {
+          if (e.deltaX > 30) goToPanel(currentPanel + 1);
+          else if (e.deltaX < -30) goToPanel(currentPanel - 1);
+        } else {
+          if (e.deltaY > 30) goToPanel(currentPanel + 1);
+          else if (e.deltaY < -30) goToPanel(currentPanel - 1);
+        }
+      }, 50);
+    };
 
+    window.addEventListener('wheel', handleWheel, { passive: false });
     return () => {
-      observers.forEach((obs) => obs.disconnect());
+      window.removeEventListener('wheel', handleWheel);
+      clearTimeout(wheelTimeout);
+    };
+  }, [currentPanel, goToPanel, archiveOpen]);
+
+  // Keyboard navigation
+  useEffect(() => {
+    const handleKey = (e: KeyboardEvent) => {
+      if (archiveOpen) return;
+      if (e.key === 'ArrowRight') goToPanel(currentPanel + 1);
+      if (e.key === 'ArrowLeft') goToPanel(currentPanel - 1);
+    };
+    window.addEventListener('keydown', handleKey);
+    return () => window.removeEventListener('keydown', handleKey);
+  }, [currentPanel, goToPanel, archiveOpen]);
+
+  // Touch navigation
+  useEffect(() => {
+    let touchStartX = 0;
+    
+    const handleTouchStart = (e: TouchEvent) => {
+      touchStartX = e.touches[0].clientX;
+    };
+    
+    const handleTouchEnd = (e: TouchEvent) => {
+      if (archiveOpen) return;
+      const diff = touchStartX - e.changedTouches[0].clientX;
+      if (Math.abs(diff) > 50) {
+        if (diff > 0) goToPanel(currentPanel + 1);
+        else goToPanel(currentPanel - 1);
+      }
+    };
+    
+    window.addEventListener('touchstart', handleTouchStart);
+    window.addEventListener('touchend', handleTouchEnd);
+    return () => {
+      window.removeEventListener('touchstart', handleTouchStart);
+      window.removeEventListener('touchend', handleTouchEnd);
+    };
+  }, [currentPanel, goToPanel, archiveOpen]);
+
+  // Crosshair body cursor
+  useEffect(() => {
+    document.body.classList.add('cursor-crosshair');
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.classList.remove('cursor-crosshair');
+      document.body.style.overflow = 'auto';
     };
   }, []);
 
+  const panelNames = ['RAUNAK SHARMA', 'SELECTED WORK', 'MANIFESTO', 'CONTACT'];
+
   return (
-    <div className="min-h-screen bg-[#181212]">
-      {/* Atmospheric gradient effects */}
-      <div className="fixed inset-0 pointer-events-none z-0">
-        <div className="absolute top-0 right-0 w-[60vw] h-[60vh] bg-[#930616]/10 rounded-full blur-[120px]" />
-        <div className="absolute bottom-0 left-0 w-[40vw] h-[40vh] bg-[#8d1515]/5 rounded-full blur-[100px]" />
+    <div className="w-screen h-screen overflow-hidden relative bg-[#181212] text-[#eedfdf]">
+      <TopNav 
+        currentPanel={currentPanel} 
+        onNavigate={goToPanel} 
+        onArchiveOpen={() => setArchiveOpen(true)} 
+      />
+      
+      <Sidebar 
+        currentPanel={currentPanel} 
+        onNavigate={goToPanel} 
+        onArchiveOpen={() => setArchiveOpen(true)}
+        archiveOpen={archiveOpen}
+      />
+
+      {/* Main Track */}
+      <div
+        className="flex h-full"
+        style={{
+          width: `${totalPanels * 100}vw`,
+          transform: `translateX(-${currentPanel * 100}vw)`,
+          transition: isAnimating
+            ? 'transform 700ms cubic-bezier(0.16, 1, 0.3, 1)'
+            : 'none',
+        }}
+      >
+        <HeroPanel onNavigate={goToPanel} />
+        <WorkPanel onNavigate={goToPanel} />
+        <ManifestoPanel onNavigate={goToPanel} />
+        <ContactPanel />
       </div>
 
-      <TopNav
-        activeSection={activeSection}
-        onArchiveOpen={() => setArchiveOpen(true)}
-      />
-      <Sidebar
-        activeSection={activeSection}
-        onArchiveOpen={() => setArchiveOpen(true)}
-      />
-      <ArchivePanel
-        isOpen={archiveOpen}
-        onClose={() => setArchiveOpen(false)}
-      />
+      {/* Fixed bottom-left panel label */}
+      <div className="fixed bottom-8 left-8 z-50 lg:left-32 pointer-events-none transition-opacity duration-300" style={{ opacity: archiveOpen ? 0 : 1 }}>
+        <p className="font-label text-xs tracking-[0.4em] text-[#c6c6c7] uppercase">
+          {panelNames[currentPanel]}
+        </p>
+      </div>
 
-      <main className="relative z-10 lg:ml-24">
-        <HeroSection />
-        <ProjectsSection />
-        <AboutSection />
-        <SkillsSection />
-        <ExperienceSection />
-        <CertificationsSection />
-        <ContactSection />
-      </main>
+      {/* Fixed bottom-right panel indicators */}
+      <div className="fixed bottom-8 right-8 z-50 flex flex-col gap-3 transition-opacity duration-300" style={{ opacity: archiveOpen ? 0 : 1 }}>
+        {['01', '02', '03', '04'].map((num, i) => (
+          <button
+            key={i}
+            onClick={() => goToPanel(i)}
+            className={`font-headline font-black text-xs tracking-widest transition-all duration-300 ${
+              i === currentPanel
+                ? 'text-[#FFB3AE] scale-125'
+                : 'text-[#3B3333] hover:text-[#8D1515]'
+            }`}
+          >
+            {num}
+          </button>
+        ))}
+      </div>
+
+      {/* Archive Panel Overlay */}
+      <ArchivePanel isOpen={archiveOpen} onClose={() => setArchiveOpen(false)} />
     </div>
   );
 };
