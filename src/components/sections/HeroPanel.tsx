@@ -66,7 +66,7 @@ export const HeroPanel: React.FC<HeroPanelProps> = ({ onNavigate }) => {
         className="hero-content-grid"
       >
         {/* LEFT COL — Headline */}
-        <div style={{ gridColumn: 1, gridRow: '1 / 3', display: 'flex', flexDirection: 'column', justifyContent: 'center', overflow: 'hidden' }}>
+        <div style={{ gridColumn: 1, gridRow: '1 / 3', display: 'flex', flexDirection: 'column', justifyContent: 'center', overflow: 'hidden', paddingLeft: 'clamp(16px, 4vw, 48px)' }}>
           {/* RAUNAK */}
           <div style={fadeUp(80)}>
             <span
@@ -118,13 +118,13 @@ export const HeroPanel: React.FC<HeroPanelProps> = ({ onNavigate }) => {
             </span>
           </div>
 
-          {/* Decorative rotated words — fixed height, clipped */}
+          {/* Decorative rotated words — fixed height, visible */}
           <div
             style={{
               position: 'relative',
               marginTop: 'clamp(12px, 2.5vh, 28px)',
-              height: 'clamp(44px, 7.5vh, 90px)',
-              overflow: 'hidden',
+              height: 'clamp(64px, 10vh, 120px)',
+              overflow: 'visible',
               pointerEvents: 'none',
               userSelect: 'none',
               flexShrink: 0,
@@ -216,12 +216,13 @@ export const HeroPanel: React.FC<HeroPanelProps> = ({ onNavigate }) => {
         zIndex: 1,
         display: 'flex',
         alignItems: 'flex-end',
-        justifyContent: 'space-between',
+        justifyContent: 'flex-end',
+        gap: 'clamp(32px, 8vw, 100px)',
         padding: '0 clamp(20px, 5vw, 80px) clamp(16px, 3vh, 28px)',
         ...fadeUp(400),
       }}>
-        {/* Left: role + socials */}
-        <div>
+        {/* Role + socials aligned right */}
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', textAlign: 'right' }}>
           <p style={{
             fontFamily: "'Inter', sans-serif",
             fontSize: 'clamp(7px, 0.9vw, 10px)',
@@ -232,7 +233,7 @@ export const HeroPanel: React.FC<HeroPanelProps> = ({ onNavigate }) => {
           }}>
             FULL-STACK DEVELOPER &amp; UI DESIGNER
           </p>
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'clamp(12px, 2vw, 24px)' }}>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'clamp(12px, 2vw, 24px)', justifyContent: 'flex-end' }}>
             {[
               { label: 'GITHUB ↗', href: 'https://github.com/RoNnY125-coder' },
               { label: 'LINKEDIN ↗', href: 'https://www.linkedin.com/in/raunak-sharma-b91650344' },
