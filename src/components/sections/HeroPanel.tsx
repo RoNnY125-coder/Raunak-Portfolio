@@ -154,9 +154,9 @@ export const HeroPanel: React.FC<HeroPanelProps> = ({ onNavigate }) => {
               fontSize: 'clamp(1.8rem, 5vw, 5.5rem)',
               lineHeight: 1,
               textTransform: 'uppercase',
-              transform: 'rotate(4deg)',
+              transform: 'translateX(-50%) rotate(4deg)',
               bottom: '-4%',
-              left: '30%',
+              left: '50%',
               whiteSpace: 'nowrap',
               color: '#FFB3AE',
             }}>
