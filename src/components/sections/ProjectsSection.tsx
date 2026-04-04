@@ -1,9 +1,11 @@
-import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
-import { ArrowUpRight, ExternalLink, Github, Folder } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { motion, useInView } from "framer-motion";
 import { useGitHubProjects } from "@/hooks/useGitHubProjects";
-import { Skeleton } from "@/components/ui/skeleton";
+
+const surfaceColors = [
+  "bg-[#302828]", "bg-[#251e1e]", "bg-[#3b3333]",
+  "bg-[#403737]", "bg-[#302828]", "bg-[#251e1e]",
+];
 
 export function ProjectsSection() {
   const { repos, loading, error } = useGitHubProjects("RoNnY125-coder");
@@ -11,145 +13,213 @@ export function ProjectsSection() {
   const isInView = useInView(ref, { once: true, margin: "-80px" });
 
   return (
-    <section id="projects" className="relative py-24 lg:pl-20">
-      <div className="container mx-auto px-6">
-        {/* Section Header */}
-        <motion.div
-          ref={ref}
-          initial={{ opacity: 0, y: 40 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6 }}
-          className="mb-16 text-center"
-        >
-          <span className="mb-3 inline-block text-sm font-medium uppercase tracking-wider text-primary">
+    <section id="projects" className="relative py-32 lg:pl-24 px-6 lg:px-16">
+      {/* Ghost number */}
+      <div className="ghost-num -top-20 left-0">02</div>
+
+      {/* Section header — left aligned */}
+      <motion.div
+        ref={ref}
+        initial={{ opacity: 0, y: 40 }}
+        animate={isInView ? { opacity: 1, y: 0 } : {}}
+        transition={{ duration: 0.6 }}
+        className="flex items-end justify-between mb-20"
+      >
+        <div>
+          <span
+            className="block text-xs tracking-[0.3em] uppercase text-[#FFB3AE] mb-3"
+            style={{ fontFamily: "'Inter', sans-serif" }}
+          >
             Portfolio
           </span>
-          <h2 className="text-3xl font-bold sm:text-4xl lg:text-5xl">
-            Selected Work
+          <h2
+            className="font-black uppercase tracking-tighter text-5xl lg:text-7xl text-[#FFB3AE]"
+            style={{ fontFamily: "'Epilogue', sans-serif" }}
+          >
+            SELECTED<br />WORKS
           </h2>
-          <p className="mx-auto mt-4 max-w-2xl text-muted-foreground">
-            Projects focused on frontend architecture, scalable UI systems,
-            and real-world functionality.
-          </p>
-        </motion.div>
+        </div>
+        <span
+          className="font-bold text-[#c6c6c7] text-lg hidden md:block"
+          style={{ fontFamily: "'Epilogue', sans-serif" }}
+        >
+          01 // {repos.length > 0 ? String(repos.length).padStart(2, "0") : "06"}
+        </span>
+      </motion.div>
 
-        {/* Projects Grid */}
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {loading &&
-            Array.from({ length: 3 }).map((_, i) => (
-              <Skeleton key={i} className="h-52 rounded-2xl" />
-            ))}
-          {error && (
-            <p className="col-span-3 text-center text-muted-foreground">{error}</p>
-          )}
-          {!loading && !error && repos.length === 0 && (
-            <p className="col-span-3 text-center text-muted-foreground">
-              No public GitHub projects are available right now.
-            </p>
-          )}
-          {!loading &&
-            repos.map((repo, index) => (
-              <motion.article
+      {/* Projects grid — asymmetric 12-col */}
+      <div className="grid grid-cols-1 md:grid-cols-12 gap-6 lg:gap-8">
+        {loading &&
+          Array.from({ length: 4 }).map((_, i) => (
+            <div
+              key={i}
+              className={`${i % 2 === 0 ? "md:col-span-8" : "md:col-span-4"} h-64 bg-[#251e1e] animate-pulse`}
+            />
+          ))}
+
+        {error && (
+          <p className="md:col-span-12 text-[#c6c6c7]">
+            {error}{" "}
+            <a href="https://github.com/RoNnY125-coder" target="_blank" className="text-[#FFB3AE] underline">
+              Visit GitHub
+            </a>
+          </p>
+        )}
+
+        {!loading &&
+          repos.map((repo, index) => {
+            const variant = index % 3;
+            const ghostNum = String(index + 1).padStart(2, "0");
+            const bg = surfaceColors[index % surfaceColors.length];
+
+            // LARGE — Effect C: scale zoom, gradient overlay, CTA slide-up, inner border shrink
+            if (variant === 0) {
+              return (
+                <motion.a
+                  key={repo.id}
+                  href={repo.html_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={isInView ? { opacity: 1, y: 0 } : {}}
+                  transition={{ duration: 0.5, delay: index * 0.08 }}
+                  className="md:col-span-8 aspect-video relative overflow-hidden group"
+                >
+                  <div className={`absolute inset-0 ${bg} scale-105 group-hover:scale-100 transition-transform duration-700`} />
+                  <div className="absolute inset-0 inner-border z-10 pointer-events-none" />
+                  <div className="absolute bottom-0 left-0 right-0 h-1/2 bg-gradient-to-t from-[#181212] to-transparent z-10" />
+                  <div className="absolute bottom-0 left-0 right-0 p-6 z-20">
+                    {repo.language && (
+                      <span className="bg-[#8d1515] text-[#ff998f] px-3 py-1 text-xs uppercase tracking-wider inline-block mb-3">
+                        {repo.language}
+                      </span>
+                    )}
+                    <h3
+                      className="font-bold text-[#eedfdf] text-xl uppercase group-hover:text-[#FFB3AE] transition-colors"
+                      style={{ fontFamily: "'Epilogue', sans-serif" }}
+                    >
+                      {repo.name.replace(/-/g, " ")}
+                    </h3>
+                    {repo.description && (
+                      <p className="text-[#c6c6c7] text-sm mt-1 line-clamp-2 max-w-md">{repo.description}</p>
+                    )}
+                  </div>
+                  <div className="absolute bottom-6 right-6 z-30">
+                    <span
+                      className="cta-reveal bg-[#FFB3AE] text-[#181212] px-5 py-2 font-black uppercase text-xs tracking-widest inline-block"
+                      style={{ fontFamily: "'Epilogue', sans-serif" }}
+                    >
+                      VIEW PROJECT
+                    </span>
+                  </div>
+                </motion.a>
+              );
+            }
+
+            // SMALL — Effect B: grayscale flash, ghost number
+            if (variant === 1) {
+              return (
+                <motion.a
+                  key={repo.id}
+                  href={repo.html_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={isInView ? { opacity: 1, y: 0 } : {}}
+                  transition={{ duration: 0.5, delay: index * 0.08 }}
+                  className="md:col-span-4 aspect-[3/4] relative overflow-hidden group self-end"
+                >
+                  <div className={`absolute inset-0 ${bg} grayscale opacity-40 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-700`} />
+                  <span
+                    className="absolute top-8 left-8 font-black text-[8rem] text-[#ffb3ae] opacity-10 select-none pointer-events-none leading-none"
+                    style={{ fontFamily: "'Epilogue', sans-serif" }}
+                  >
+                    {ghostNum}
+                  </span>
+                  <div className="absolute bottom-0 left-0 right-0 p-6 z-10">
+                    {repo.language && (
+                      <span className="bg-[#8d1515] text-[#ff998f] px-3 py-1 text-xs uppercase tracking-wider inline-block mb-3">
+                        {repo.language}
+                      </span>
+                    )}
+                    <h3
+                      className="font-bold text-[#eedfdf] text-lg uppercase group-hover:text-[#FFB3AE] transition-colors"
+                      style={{ fontFamily: "'Epilogue', sans-serif" }}
+                    >
+                      {repo.name.replace(/-/g, " ")}
+                    </h3>
+                  </div>
+                </motion.a>
+              );
+            }
+
+            // MEDIUM — Red overlay blend, CTA slide-up
+            return (
+              <motion.a
                 key={repo.id}
+                href={repo.html_url}
+                target="_blank"
+                rel="noopener noreferrer"
                 initial={{ opacity: 0, y: 30 }}
                 animate={isInView ? { opacity: 1, y: 0 } : {}}
                 transition={{ duration: 0.5, delay: index * 0.08 }}
-                className="group flex flex-col rounded-2xl border bg-background/60 p-6 backdrop-blur transition-all duration-300 hover:-translate-y-1 hover:border-primary/40 hover:shadow-lg hover:glow-border"
+                className="md:col-start-2 md:col-span-6 aspect-square relative overflow-hidden group"
               >
-                <div className="mb-4 flex items-center justify-between">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10">
-                    <Folder className="h-6 w-6 text-primary" />
-                  </div>
-                  <div className="flex gap-3">
-                    <a
-                      href={repo.html_url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-muted-foreground transition-colors hover:text-foreground"
-                    >
-                      <Github className="h-5 w-5" />
-                    </a>
-                    {repo.homepage && (
-                      <a
-                        href={repo.homepage}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-muted-foreground transition-colors hover:text-foreground"
-                      >
-                        <ExternalLink className="h-5 w-5" />
-                      </a>
-                    )}
-                  </div>
-                </div>
-                <h3 className="mb-3 text-xl font-semibold capitalize transition-colors group-hover:text-primary">
-                  {repo.name.replace(/-/g, " ")}
-                </h3>
-                <p className="mb-6 flex-grow text-sm leading-relaxed text-muted-foreground">
-                  {repo.description}
-                </p>
-                <div className="flex flex-wrap gap-2">
+                <div className={`absolute inset-0 ${bg} transition-all duration-700`} />
+                <div className="absolute inset-0 bg-[#8D1515] mix-blend-multiply opacity-20 group-hover:opacity-0 transition-opacity duration-500" />
+                <div className="absolute bottom-0 left-0 right-0 p-6 z-10 bg-gradient-to-t from-[#181212]/80 to-transparent">
                   {repo.language && (
-                    <span className="rounded-full bg-secondary px-3 py-1 text-xs font-medium text-secondary-foreground">
+                    <span className="bg-[#8d1515] text-[#ff998f] px-3 py-1 text-xs uppercase tracking-wider inline-block mb-3">
                       {repo.language}
                     </span>
                   )}
-                  {repo.topics.slice(0, 3).map((topic) => (
-                    <span
-                      key={topic}
-                      className="rounded-full bg-secondary px-3 py-1 text-xs font-medium text-secondary-foreground"
-                    >
-                      {topic}
-                    </span>
-                  ))}
-                </div>
-                <div className="mt-6 flex items-center justify-between gap-3 border-t border-border/60 pt-4">
-                  <a
-                    href={repo.html_url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 text-sm font-medium text-primary transition-colors hover:text-primary/80"
+                  <h3
+                    className="font-bold text-[#eedfdf] text-xl uppercase group-hover:text-[#FFB3AE] transition-colors"
+                    style={{ fontFamily: "'Epilogue', sans-serif" }}
                   >
-                    View Repository
-                    <ArrowUpRight className="h-4 w-4" />
-                  </a>
-                  {repo.homepage && (
-                    <a
-                      href={repo.homepage}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-sm text-muted-foreground transition-colors hover:text-foreground"
-                    >
-                      Live Demo
-                    </a>
+                    {repo.name.replace(/-/g, " ")}
+                  </h3>
+                  {repo.description && (
+                    <p className="text-[#c6c6c7] text-sm mt-1 line-clamp-2">{repo.description}</p>
                   )}
                 </div>
-              </motion.article>
-            ))}
-        </div>
-
-        {/* View More Button */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={isInView ? { opacity: 1 } : {}}
-          transition={{ delay: 0.7 }}
-          className="mt-14 text-center"
-        >
-          <a
-            href="https://github.com/RoNnY125-coder"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Button
-              variant="outline"
-              size="lg"
-              className="gap-2 transition-all hover:scale-105"
-            >
-              <Github className="h-4 w-4" />
-              View All Projects on GitHub
-            </Button>
-          </a>
-        </motion.div>
+                <div className="absolute bottom-6 right-6 z-20">
+                  <span
+                    className="cta-reveal bg-[#FFB3AE] text-[#181212] px-5 py-2 font-black uppercase text-xs tracking-widest inline-block"
+                    style={{ fontFamily: "'Epilogue', sans-serif" }}
+                  >
+                    VIEW PROJECT
+                  </span>
+                </div>
+              </motion.a>
+            );
+          })}
       </div>
+
+      {/* View All link */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={isInView ? { opacity: 1 } : {}}
+        transition={{ delay: 0.7 }}
+        className="flex justify-end mt-12"
+      >
+        <a
+          href="https://github.com/RoNnY125-coder"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex items-center gap-2 group"
+        >
+          <span
+            className="font-black uppercase text-sm tracking-widest text-[#FFB3AE]"
+            style={{ fontFamily: "'Epilogue', sans-serif" }}
+          >
+            VIEW ALL ON GITHUB
+          </span>
+          <span className="material-symbols-outlined text-[#FFB3AE] group-hover:translate-x-2 transition-transform duration-300">
+            arrow_forward
+          </span>
+        </a>
+      </motion.div>
     </section>
   );
 }

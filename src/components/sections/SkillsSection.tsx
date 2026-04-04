@@ -1,5 +1,5 @@
-import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
+import { motion, useInView } from "framer-motion";
 
 const skillCategories = [
   {
@@ -46,49 +46,96 @@ export function SkillsSection() {
   const isInView = useInView(ref, { once: true, margin: "-100px" });
 
   return (
-    <section id="skills" className="relative py-24 lg:pl-20">
-      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-primary/5 to-transparent" />
-      
-      <div className="container relative mx-auto px-6">
-        <motion.div
-          ref={ref}
-          initial={{ opacity: 0, y: 40 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6 }}
-          className="mb-16 text-center"
-        >
-          <span className="mb-3 inline-block text-sm font-medium uppercase tracking-wider text-primary">
-            Skills & Expertise
-          </span>
-          <h2 className="font-heading text-3xl font-bold sm:text-4xl lg:text-5xl">
-            Technologies I work with
-          </h2>
-        </motion.div>
+    <section id="skills" className="relative py-32 lg:pl-24 px-6 lg:px-16">
+      <div className="ghost-num -top-10 left-10">04</div>
 
-        <div className="grid gap-8 md:grid-cols-2">
-          {skillCategories.map((category, categoryIndex) => (
-            <motion.div
-              key={category.title}
-              initial={{ opacity: 0, y: 30 }}
-              animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.5, delay: categoryIndex * 0.1 }}
-              className="card-glass hover:glow-border p-6 lg:p-8"
-            >
-              <h3 className="mb-6 font-heading text-xl font-semibold text-gradient">
-                {category.title}
-              </h3>
-              <div className="flex flex-wrap gap-2">
-                {category.skills.map((skill) => (
-                  <span
-                    key={skill.name}
-                    className="rounded-full border border-primary/30 bg-primary/10 px-3 py-1 text-sm font-medium text-primary"
-                  >
-                    {skill.name}
-                  </span>
-                ))}
-              </div>
-            </motion.div>
-          ))}
+      <motion.div
+        ref={ref}
+        initial={{ opacity: 0, y: 40 }}
+        animate={isInView ? { opacity: 1, y: 0 } : {}}
+        transition={{ duration: 0.6 }}
+        className="mb-16"
+      >
+        <span
+          className="block text-xs tracking-[0.3em] uppercase text-[#FFB3AE] mb-3"
+          style={{ fontFamily: "'Inter', sans-serif" }}
+        >
+          Skills & Expertise
+        </span>
+        <h2
+          className="font-black uppercase tracking-tighter text-4xl lg:text-6xl text-[#eedfdf]"
+          style={{ fontFamily: "'Epilogue', sans-serif" }}
+        >
+          TECHNOLOGIES I<br />WORK WITH
+        </h2>
+      </motion.div>
+
+      {/* Staggered 2-col layout */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
+        {/* Left column */}
+        <div className="space-y-6">
+          {skillCategories
+            .filter((_, i) => i % 2 === 0)
+            .map((category, ci) => (
+              <motion.div
+                key={category.title}
+                initial={{ opacity: 0, y: 30 }}
+                animate={isInView ? { opacity: 1, y: 0 } : {}}
+                transition={{ duration: 0.5, delay: ci * 0.1 }}
+                className="bg-[#211a1a] p-8 group hover:bg-[#251e1e] transition-colors duration-500"
+              >
+                <h3
+                  className="font-black uppercase text-xl text-gradient mb-6"
+                  style={{ fontFamily: "'Epilogue', sans-serif" }}
+                >
+                  {category.title}
+                </h3>
+                <div className="flex flex-wrap gap-2">
+                  {category.skills.map((skill) => (
+                    <span
+                      key={skill.name}
+                      className="bg-[#3b3333] text-[#c6c6c7] px-3 py-2 text-xs uppercase tracking-wider hover:bg-[#8d1515] hover:text-[#ff998f] transition-colors duration-200 cursor-default"
+                      style={{ fontFamily: "'Inter', sans-serif" }}
+                    >
+                      {skill.name} — {skill.level}%
+                    </span>
+                  ))}
+                </div>
+              </motion.div>
+            ))}
+        </div>
+
+        {/* Right column — offset down */}
+        <div className="space-y-6 pt-0 md:pt-12">
+          {skillCategories
+            .filter((_, i) => i % 2 === 1)
+            .map((category, ci) => (
+              <motion.div
+                key={category.title}
+                initial={{ opacity: 0, y: 30 }}
+                animate={isInView ? { opacity: 1, y: 0 } : {}}
+                transition={{ duration: 0.5, delay: (ci + 2) * 0.1 }}
+                className="bg-[#211a1a] p-8 group hover:bg-[#251e1e] transition-colors duration-500"
+              >
+                <h3
+                  className="font-black uppercase text-xl text-gradient mb-6"
+                  style={{ fontFamily: "'Epilogue', sans-serif" }}
+                >
+                  {category.title}
+                </h3>
+                <div className="flex flex-wrap gap-2">
+                  {category.skills.map((skill) => (
+                    <span
+                      key={skill.name}
+                      className="bg-[#3b3333] text-[#c6c6c7] px-3 py-2 text-xs uppercase tracking-wider hover:bg-[#8d1515] hover:text-[#ff998f] transition-colors duration-200 cursor-default"
+                      style={{ fontFamily: "'Inter', sans-serif" }}
+                    >
+                      {skill.name} — {skill.level}%
+                    </span>
+                  ))}
+                </div>
+              </motion.div>
+            ))}
         </div>
       </div>
     </section>
