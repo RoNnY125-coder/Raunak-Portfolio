@@ -106,6 +106,46 @@ export const TopNav: React.FC<TopNavProps> = ({ currentPanel, onNavigate, onArch
           </button>
         </div>
       )}
+
+      {/* Floating home button — visible when not on hero */}
+      {currentPanel !== 0 && (
+        <button
+          onClick={() => handleNav(0)}
+          style={{
+            position: 'fixed',
+            bottom: '32px',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            zIndex: 60,
+            background: 'rgba(24,18,18,0.85)',
+            backdropFilter: 'blur(12px)',
+            border: '1px solid #3b3333',
+            color: '#FFB3AE',
+            fontFamily: "'Epilogue', sans-serif",
+            fontWeight: 900,
+            fontSize: 10,
+            letterSpacing: '0.3em',
+            textTransform: 'uppercase',
+            padding: '10px 20px',
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            gap: 8,
+            transition: 'border-color 300ms ease, color 300ms ease',
+          }}
+          onMouseEnter={e => {
+            (e.currentTarget as HTMLElement).style.borderColor = '#8D1515';
+            (e.currentTarget as HTMLElement).style.color = '#ffdad7';
+          }}
+          onMouseLeave={e => {
+            (e.currentTarget as HTMLElement).style.borderColor = '#3b3333';
+            (e.currentTarget as HTMLElement).style.color = '#FFB3AE';
+          }}
+        >
+          <span className="material-symbols-outlined" style={{ fontSize: 14 }}>home</span>
+          HOME
+        </button>
+      )}
     </>
   );
 };
