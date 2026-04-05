@@ -34,16 +34,24 @@ export function ArchivePanel({ isOpen, onClose }: ArchivePanelProps) {
   const certRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (isOpen) document.addEventListener("keydown", e => { if (e.key === "Escape") onClose(); });
-    return () => document.removeEventListener("keydown", () => {});
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    if (isOpen) document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
   }, [isOpen, onClose]);
 
   useEffect(() => {
     if (!isOpen) return;
     setLoading(true);
-    fetch("https://api.github.com/users/RoNnY125-coder/repos?sort=updated&per_page=12")
+    fetch("https://api.github.com/users/RoNnY125-coder/repos?sort=updated&per_page=30")
       .then(r => r.json())
-      .then((data: GitHubRepo[]) => { setRepos(data.filter(r => !r.name.toLowerCase().includes("raunak-portfolio"))); setLoading(false); })
+      .then((data: GitHubRepo[]) => { 
+        if (Array.isArray(data)) {
+          setRepos(data.filter(r => !r.name.toLowerCase().includes("raunak-portfolio"))); 
+        }
+        setLoading(false); 
+      })
       .catch(() => setLoading(false));
   }, [isOpen]);
 

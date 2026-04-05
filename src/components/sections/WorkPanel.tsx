@@ -26,20 +26,12 @@ export const WorkPanel: React.FC<WorkPanelProps> = ({ onNavigate }) => {
   const [visible, setVisible] = useState(false);
   const sectionRef = useRef<HTMLElement>(null);
 
-  // Exact keywords to filter the top 5 repos requested
-  const TARGET_KEYWORDS = ['campusmind', 'commerce', 'analyzer', 'bankagement', 'task'];
-
   useEffect(() => {
-    fetch('https://api.github.com/users/RoNnY125-coder/repos?sort=updated&per_page=100')
+    fetch('https://api.github.com/users/RoNnY125-coder/repos?sort=updated&per_page=9')
       .then(res => res.json())
       .then(data => { 
         if (Array.isArray(data)) {
-          // Filter to matches
-          const filtered = data.filter(r => 
-            TARGET_KEYWORDS.some(k => r.name.toLowerCase().includes(k))
-          );
-          // Limit to 5
-          setRepos(filtered.slice(0, 5));
+          setRepos(data);
         }
         setLoading(false); 
       })
