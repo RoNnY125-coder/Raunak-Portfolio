@@ -124,7 +124,11 @@ const Index = () => {
       <div className="fixed bottom-8 right-8 z-50 flex flex-col gap-3" style={{ opacity: archiveOpen ? 0 : 1, transition: 'opacity 300ms ease' }}>
         {['01', '02', '03', '04'].map((num, i) => (
           <button key={i} onClick={() => goToPanel(i)}
-            className={`font-headline font-black text-xs tracking-widest transition-all duration-300 ${i === currentPanel ? 'text-[#FFB3AE] scale-125' : 'text-[#3B3333] hover:text-[#8D1515]'}`}>
+            className={`font-headline font-black text-xs tracking-widest transition-all duration-300 transform ${
+              i === currentPanel 
+                ? 'text-[#FFB3AE] scale-125 translate-x-[-4px]' 
+                : 'text-[#3B3333] hover:text-[#FFB3AE] hover:scale-125 hover:-translate-y-1'
+            }`}>
             {num}
           </button>
         ))}
