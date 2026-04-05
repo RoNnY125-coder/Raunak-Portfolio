@@ -26,27 +26,54 @@ export const WorkPanel: React.FC<WorkPanelProps> = ({ onNavigate }) => {
   const [visible, setVisible] = useState(false);
   const sectionRef = useRef<HTMLElement>(null);
 
-  const EXCLUDED_REPOS = [
-    'ronny125-coder',
-    'raunak-portfolio',
-    'javascript_journey',
-    'dummy-website---1',
-    'portfolio-prototype'
+  // Static projects data for 100% reliability
+  const STATIC_REPOS: Repo[] = [
+    {
+      id: 1187439861,
+      name: "CampusMind",
+      description: "An AI-powered academic assistant designed to streamline student workflow. Features include intelligent note-taking, assignment tracking, and collaborative study tools.",
+      language: "TypeScript",
+      html_url: "https://github.com/RoNnY125-coder/CampusMind",
+      stargazers_count: 2
+    },
+    {
+      id: 1121251552,
+      name: "E-commerce-Dashboard",
+      description: "A modern, responsive admin interface built with React, Tailwind CSS, Chart.js, and Supabase. Features real-time analytics, inventory management, and order tracking.",
+      language: "TypeScript",
+      html_url: "https://github.com/RoNnY125-coder/E-commerce-Dashboard",
+      stargazers_count: 0
+    },
+    {
+      id: 1192321022,
+      name: "AI-Resume-Analyzer",
+      description: "A smart AI/ML tool that parses resumes, evaluates skills, and provides insights to help recruiters and job seekers quickly assess qualifications.",
+      language: "Python",
+      html_url: "https://github.com/RoNnY125-coder/AI-Resume-Analyzer",
+      stargazers_count: 1
+    },
+    {
+      id: 1169738071,
+      name: "Bankagement",
+      description: "A mobile banking app prototype designed to simulate modern fintech UI/UX flows. Focused on clean financial data presentation and secure interaction design.",
+      language: "HTML",
+      html_url: "https://github.com/RoNnY125-coder/Bankagement",
+      stargazers_count: 0
+    },
+    {
+      id: 1122638308,
+      name: "Task-Management-App",
+      description: "A modern collaborative task management app with drag-and-drop task boards, multiple task views, and seamless dark & light mode support.",
+      language: "TypeScript",
+      html_url: "https://github.com/RoNnY125-coder/Task-Management-App",
+      stargazers_count: 0
+    }
   ];
 
   useEffect(() => {
-    fetch('https://api.github.com/users/RoNnY125-coder/repos?sort=updated&per_page=100')
-      .then(res => res.json())
-      .then(data => { 
-        if (Array.isArray(data)) {
-          const filtered = data.filter(r => 
-            !EXCLUDED_REPOS.some(excluded => r.name.toLowerCase().includes(excluded))
-          );
-          setRepos(filtered.slice(0, 5)); // Limit to first 5 valid projects
-        }
-        setLoading(false); 
-      })
-      .catch(() => setLoading(false));
+    // We now use static repos for the main grid to avoid API rate limits/failures
+    setRepos(STATIC_REPOS);
+    setLoading(false);
   }, []);
 
   // Trigger card animations when panel becomes visible

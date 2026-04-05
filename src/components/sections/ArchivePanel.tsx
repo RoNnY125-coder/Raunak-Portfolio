@@ -44,10 +44,11 @@ export function ArchivePanel({ isOpen, onClose }: ArchivePanelProps) {
   useEffect(() => {
     if (!isOpen) return;
     setLoading(true);
-    fetch("https://api.github.com/users/RoNnY125-coder/repos?sort=updated&per_page=30")
+    fetch("https://api.github.com/users/RoNnY125-coder/repos?sort=updated&per_page=100")
       .then(r => r.json())
       .then((data: GitHubRepo[]) => { 
         if (Array.isArray(data)) {
+          // Show all repos except the portfolio itself
           setRepos(data.filter(r => !r.name.toLowerCase().includes("raunak-portfolio"))); 
         }
         setLoading(false); 
