@@ -26,12 +26,23 @@ export const WorkPanel: React.FC<WorkPanelProps> = ({ onNavigate }) => {
   const [visible, setVisible] = useState(false);
   const sectionRef = useRef<HTMLElement>(null);
 
+  const EXCLUDED_REPOS = [
+    'ronny125-coder',
+    'raunak-portfolio',
+    'javascript_journey',
+    'dummy-website---1',
+    'portfolio-prototype'
+  ];
+
   useEffect(() => {
-    fetch('https://api.github.com/users/RoNnY125-coder/repos?sort=updated&per_page=9')
+    fetch('https://api.github.com/users/RoNnY125-coder/repos?sort=updated&per_page=100')
       .then(res => res.json())
       .then(data => { 
         if (Array.isArray(data)) {
-          setRepos(data);
+          const filtered = data.filter(r => 
+            !EXCLUDED_REPOS.some(excluded => r.name.toLowerCase().includes(excluded))
+          );
+          setRepos(filtered.slice(0, 5)); // Limit to first 5 valid projects
         }
         setLoading(false); 
       })
@@ -94,129 +105,136 @@ export const WorkPanel: React.FC<WorkPanelProps> = ({ onNavigate }) => {
           </div>
         ) : (
           <div className="grid grid-cols-12 gap-4 md:gap-6">
-            {repos.map((repo, i) => {
-              const isHovered = hoveredId === repo.id;
-              const langColor = LANG_COLORS[repo.language] || '#8D1515';
-              return (
-                <a
-                  key={repo.id}
-                  href={repo.html_url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={getGridClasses(i)}
-                  style={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'space-between',
-                    padding: i === 0 ? '40px' : '24px', // Extra padding for feature block
-                    background: isHovered ? '#251e1e' : '#1a1414',
-                    border: `1px solid ${isHovered ? '#8D1515' : '#251e1e'}`,
-                    textDecoration: 'none',
-                    position: 'relative',
-                    overflow: 'hidden',
-                    cursor: 'pointer',
-                    transform: isHovered ? 'translateY(-4px) scale(1.015)' : 'translateY(0) scale(1)',
-                    boxShadow: isHovered ? '0 16px 40px rgba(141,21,21,0.18)' : '0 0 0 transparent',
-                    transition: 'all 300ms cubic-bezier(0.16,1,0.3,1)',
-                    ...cardEnter(i + 1),
-                  }}
-                  onMouseEnter={() => setHoveredId(repo.id)}
-                  onMouseLeave={() => setHoveredId(null)}
-                >
-                  {/* Subtle Background Graphic for feature panels */}
-                  {(i === 0 || i === 2) && (
-                    <div style={{
-                      position: 'absolute', inset: 0, opacity: isHovered ? 0.08 : 0.03,
-                      background: `radial-gradient(circle at 100% 100%, #FFB3AE, transparent 65%)`,
-                      transition: 'opacity 300ms', pointerEvents: 'none'
-                    }} />
-                  )}
-
-                  {/* Ghost number */}
-                  <span style={{
-                    position: 'absolute', bottom: '-8px', right: '12px',
-                    fontFamily: "'Epilogue', sans-serif", fontWeight: 900,
-                    fontSize: i === 0 ? '12rem' : '6rem', 
-                    color: '#251e1e',
-                    lineHeight: 1, pointerEvents: 'none', userSelect: 'none',
-                    transition: 'color 300ms',
-                    ...(isHovered ? { color: '#302828' } : {}),
-                    zIndex: 0,
-                  }}>
-                    {String(i + 1).padStart(2, '0')}
-                  </span>
-
-                  {/* Top: language + arrow */}
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '12px', position: 'relative', zIndex: 1 }}>
-                    {repo.language && (
-                      <span style={{
-                        fontFamily: "'Inter', sans-serif", fontSize: '9px',
-                        letterSpacing: '0.15em', textTransform: 'uppercase',
-                        color: langColor, background: `${langColor}18`,
-                        padding: '4px 10px', border: `1px solid ${langColor}40`,
-                      }}>
-                        {repo.language}
-                      </span>
-                    )}
-                    <span className="material-symbols-outlined" style={{
-                      fontSize: i === 0 ? '24px' : '18px',
-                      color: isHovered ? '#FFB3AE' : '#3b3333',
-                      transition: 'color 300ms, transform 300ms',
-                      transform: isHovered ? 'translate(2px,-2px)' : 'translate(0,0)',
-                    }}>
-                      north_east
-                    </span>
-                  </div>
-
-                  <div style={{ position: 'relative', zIndex: 1, marginTop: 'auto' }}>
-                    {/* Repo name */}
-                    <h3 style={{
-                      fontFamily: "'Epilogue', sans-serif", fontWeight: 900,
-                      fontSize: i === 0 ? 'clamp(1.5rem, 3vw, 2.5rem)' : 'clamp(1rem, 1.5vw, 1.25rem)',
-                      lineHeight: 1.1,
-                      color: isHovered ? '#FFB3AE' : '#eedfdf',
-                      textTransform: 'uppercase', letterSpacing: '0.01em',
-                      margin: '0 0 12px', transition: 'color 300ms',
-                    }}>
-                      {repo.name.replace(/-/g, ' ')}
-                    </h3>
-
-                    {/* Description */}
-                    {repo.description && (
-                      <p style={{
-                        fontFamily: "'Inter', sans-serif", 
-                        fontSize: i === 0 ? '14px' : '12px',
-                        color: '#c6c6c7', margin: '0 0 16px', lineHeight: 1.6,
-                        display: '-webkit-box', WebkitLineClamp: i === 0 ? 3 : 2,
-                        WebkitBoxOrient: 'vertical', overflow: 'hidden',
-                        maxWidth: i === 0 ? '75%' : '100%',
-                      }}>
-                        {repo.description}
-                      </p>
-                    )}
-
-                    {/* Bottom: "VIEW PROJECT" reveal */}
-                    <div style={{
+            {repos.length > 0 ? (
+              repos.map((repo, i) => {
+                const isHovered = hoveredId === repo.id;
+                const langColor = LANG_COLORS[repo.language] || '#8D1515';
+                return (
+                  <a
+                    key={repo.id}
+                    href={repo.html_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={getGridClasses(i)}
+                    style={{
+                      display: 'flex',
+                      flexDirection: 'column',
+                      justifyContent: 'space-between',
+                      padding: i === 0 ? '40px' : '24px', // Extra padding for feature block
+                      background: isHovered ? '#251e1e' : '#1a1414',
+                      border: `1px solid ${isHovered ? '#8D1515' : '#251e1e'}`,
+                      textDecoration: 'none',
+                      position: 'relative',
                       overflow: 'hidden',
-                      height: isHovered ? '32px' : '0px',
-                      transition: 'height 300ms cubic-bezier(0.16,1,0.3,1)',
+                      cursor: 'pointer',
+                      transform: isHovered ? 'translateY(-4px) scale(1.015)' : 'translateY(0) scale(1)',
+                      boxShadow: isHovered ? '0 16px 40px rgba(141,21,21,0.18)' : '0 0 0 transparent',
+                      transition: 'all 300ms cubic-bezier(0.16,1,0.3,1)',
+                      ...cardEnter(i + 1),
+                    }}
+                    onMouseEnter={() => setHoveredId(repo.id)}
+                    onMouseLeave={() => setHoveredId(null)}
+                  >
+                    {/* Subtle Background Graphic for feature panels */}
+                    {(i === 0 || i === 2) && (
+                      <div style={{
+                        position: 'absolute', inset: 0, opacity: isHovered ? 0.08 : 0.03,
+                        background: `radial-gradient(circle at 100% 100%, #FFB3AE, transparent 65%)`,
+                        transition: 'opacity 300ms', pointerEvents: 'none'
+                      }} />
+                    )}
+
+                    {/* Ghost number */}
+                    <span style={{
+                      position: 'absolute', bottom: '-8px', right: '12px',
+                      fontFamily: "'Epilogue', sans-serif", fontWeight: 900,
+                      fontSize: i === 0 ? '12rem' : '6rem', 
+                      color: '#251e1e',
+                      lineHeight: 1, pointerEvents: 'none', userSelect: 'none',
+                      transition: 'color 300ms',
+                      ...(isHovered ? { color: '#302828' } : {}),
+                      zIndex: 0,
                     }}>
-                      <span style={{
-                        display: 'inline-block',
-                        fontFamily: "'Epilogue', sans-serif", fontWeight: 900,
-                        fontSize: '10px', letterSpacing: '0.25em',
-                        textTransform: 'uppercase', color: '#181212',
-                        background: '#FFB3AE', padding: '6px 16px',
-                        transform: isHovered ? 'translateY(0)' : 'translateY(100%)',
-                        transition: 'transform 300ms cubic-bezier(0.16,1,0.3,1) 50ms',
+                      {String(i + 1).padStart(2, '0')}
+                    </span>
+
+                    {/* Top: language + arrow */}
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '12px', position: 'relative', zIndex: 1 }}>
+                      {repo.language && (
+                        <span style={{
+                          fontFamily: "'Inter', sans-serif", fontSize: '9px',
+                          letterSpacing: '0.15em', textTransform: 'uppercase',
+                          color: langColor, background: `${langColor}18`,
+                          padding: '4px 10px', border: `1px solid ${langColor}40`,
+                        }}>
+                          {repo.language}
+                        </span>
+                      )}
+                      <span className="material-symbols-outlined" style={{
+                        fontSize: i === 0 ? '24px' : '18px',
+                        color: isHovered ? '#FFB3AE' : '#3b3333',
+                        transition: 'color 300ms, transform 300ms',
+                        transform: isHovered ? 'translate(2px,-2px)' : 'translate(0,0)',
                       }}>
-                        ACCESS REPOSITORY →
+                        north_east
                       </span>
                     </div>
-                  </div>
-                </a>
-              );
-            })}
+
+                    <div style={{ position: 'relative', zIndex: 1, marginTop: 'auto' }}>
+                      {/* Repo name */}
+                      <h3 style={{
+                        fontFamily: "'Epilogue', sans-serif", fontWeight: 900,
+                        fontSize: i === 0 ? 'clamp(1.5rem, 3vw, 2.5rem)' : 'clamp(1rem, 1.5vw, 1.25rem)',
+                        lineHeight: 1.1,
+                        color: isHovered ? '#FFB3AE' : '#eedfdf',
+                        textTransform: 'uppercase', letterSpacing: '0.01em',
+                        margin: '0 0 12px', transition: 'color 300ms',
+                      }}>
+                        {repo.name.replace(/-/g, ' ')}
+                      </h3>
+
+                      {/* Description */}
+                      {repo.description && (
+                        <p style={{
+                          fontFamily: "'Inter', sans-serif", 
+                          fontSize: i === 0 ? '14px' : '12px',
+                          color: '#c6c6c7', margin: '0 0 16px', lineHeight: 1.6,
+                          display: '-webkit-box', WebkitLineClamp: i === 0 ? 3 : 2,
+                          WebkitBoxOrient: 'vertical', overflow: 'hidden',
+                          maxWidth: i === 0 ? '75%' : '100%',
+                        }}>
+                          {repo.description}
+                        </p>
+                      )}
+
+                      {/* Bottom: "VIEW PROJECT" reveal */}
+                      <div style={{
+                        overflow: 'hidden',
+                        height: isHovered ? '32px' : '0px',
+                        transition: 'height 300ms cubic-bezier(0.16,1,0.3,1)',
+                      }}>
+                        <span style={{
+                          display: 'inline-block',
+                          fontFamily: "'Epilogue', sans-serif", fontWeight: 900,
+                          fontSize: '10px', letterSpacing: '0.25em',
+                          textTransform: 'uppercase', color: '#181212',
+                          background: '#FFB3AE', padding: '6px 16px',
+                          transform: isHovered ? 'translateY(0)' : 'translateY(100%)',
+                          transition: 'transform 300ms cubic-bezier(0.16,1,0.3,1) 50ms',
+                        }}>
+                          ACCESS REPOSITORY →
+                        </span>
+                      </div>
+                    </div>
+                  </a>
+                );
+              })
+            ) : (
+              <div className="col-span-12 py-20 text-center border border-[#3b3333] bg-[#1a1414]">
+                <p className="font-headline font-black text-xl text-[#FFB3AE] uppercase tracking-widest mb-4">No Core Systems Detected</p>
+                <p className="text-[#c6c6c7] max-w-md mx-auto text-sm">Our neural link to GitHub is active, but no repositories matched the primary exclusion filter.</p>
+              </div>
+            )}
           </div>
         )}
       </div>

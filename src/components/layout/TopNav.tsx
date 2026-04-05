@@ -91,7 +91,7 @@ export const TopNav: React.FC<TopNavProps> = ({ currentPanel, onNavigate, onArch
         ))}
         {/* Resume link in mobile menu */}
         <a
-          href="https://drive.google.com/file/d/YOUR_RESUME_FILE_ID/view"
+          href="/resume.pdf"
           target="_blank"
           rel="noopener noreferrer"
           className="font-headline font-black text-2xl uppercase text-[#8D1515] hover:text-[#FFB3AE] transition-colors mt-4"
