@@ -112,7 +112,7 @@ export const HeroPanel: React.FC<HeroPanelProps> = ({ onNavigate }) => {
       >
         {/* LEFT COL — Headline */}
         <div 
-          style={{ gridColumn: 1, gridRow: '1 / 3', display: 'flex', flexDirection: 'column', justifyContent: 'center', overflow: 'hidden', paddingLeft: 'clamp(16px, 4vw, 48px)', cursor: 'crosshair' }}
+          style={{ gridColumn: 1, gridRow: '1 / 3', display: 'flex', flexDirection: 'column', justifyContent: 'center', overflow: 'hidden', paddingLeft: 'clamp(16px, 4vw, 48px)' }}
           onMouseEnter={() => setIsHoveringName(true)}
           onMouseLeave={() => setIsHoveringName(false)}
         >
