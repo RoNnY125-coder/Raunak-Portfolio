@@ -44,12 +44,18 @@ export function ArchivePanel({ isOpen, onClose }: ArchivePanelProps) {
   useEffect(() => {
     if (!isOpen) return;
     setLoading(true);
-    fetch("https://api.github.com/users/RoNnY125-coder/repos?sort=updated&per_page=100")
-      .then(r => r.json())
+    fetch("/api/github-projects?username=RoNnY125-coder")
+      .then(r => {
+        if (!r.ok) {
+          return fetch("https://api.github.com/users/RoNnY125-coder/repos?sort=updated&per_page=100&type=public", {
+            headers: { Accept: 'application/vnd.github+json' }
+          }).then(res => res.json());
+        }
+        return r.json();
+      })
       .then((data: GitHubRepo[]) => { 
         if (Array.isArray(data)) {
-          // Show all repos except the portfolio itself
-          setRepos(data.filter(r => !r.name.toLowerCase().includes("raunak-portfolio"))); 
+          setRepos(data); 
         }
         setLoading(false); 
       })

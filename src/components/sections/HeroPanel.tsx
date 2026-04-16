@@ -265,11 +265,40 @@ export const HeroPanel: React.FC<HeroPanelProps> = ({ onNavigate }) => {
         zIndex: 1,
         display: 'flex',
         alignItems: 'flex-end',
-        justifyContent: 'flex-end',
+        justifyContent: 'space-between',
         gap: 'clamp(32px, 8vw, 100px)',
         padding: '0 clamp(20px, 5vw, 80px) clamp(16px, 3vh, 28px)',
         ...fadeUp(400),
       }}>
+        {/* Left: scroll indicator (horizontal) */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', paddingBottom: '4px' }}>
+          <span style={{
+            fontFamily: "'Inter', sans-serif",
+            fontSize: '8px',
+            letterSpacing: '0.35em',
+            color: '#c6c6c7',
+            textTransform: 'uppercase',
+          }}>
+            SCROLL →
+          </span>
+          <div style={{
+            height: '1px',
+            width: 'clamp(36px, 7vw, 72px)',
+            background: 'rgba(89,65,62,0.3)',
+            position: 'relative',
+          }}>
+            <div style={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              height: '100%',
+              width: '33%',
+              background: '#8D1515',
+              animation: 'scrollPulseX 2s ease-in-out infinite',
+            }} />
+          </div>
+        </div>
+
         {/* Role + socials aligned right */}
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', textAlign: 'right' }}>
           <p style={{
@@ -321,34 +350,6 @@ export const HeroPanel: React.FC<HeroPanelProps> = ({ onNavigate }) => {
           </div>
         </div>
 
-        {/* Right: scroll indicator */}
-        <div style={{ display: 'flex', alignItems: 'flex-end', gap: '8px', paddingBottom: '2px' }}>
-          <span style={{
-            fontFamily: "'Inter', sans-serif",
-            fontSize: '8px',
-            letterSpacing: '0.35em',
-            color: '#c6c6c7',
-            writingMode: 'vertical-rl',
-            textTransform: 'uppercase',
-          }}>
-            SCROLL →
-          </span>
-          <div style={{
-            width: '1px',
-            height: 'clamp(36px, 7vh, 72px)',
-            background: 'rgba(89,65,62,0.3)',
-            position: 'relative',
-          }}>
-            <div style={{
-              position: 'absolute',
-              top: 0,
-              left: 0,
-              width: '100%',
-              height: '33%',
-              background: '#8D1515',
-              animation: 'scrollPulse 2s ease-in-out infinite',
-            }} />
-          </div>
         </div>
       </div>
 
@@ -370,6 +371,10 @@ export const HeroPanel: React.FC<HeroPanelProps> = ({ onNavigate }) => {
         @keyframes scrollPulse {
           0%, 100% { opacity: 1; transform: translateY(0); }
           50% { opacity: 0.3; transform: translateY(8px); }
+        }
+        @keyframes scrollPulseX {
+          0%, 100% { opacity: 1; transform: translateX(0); }
+          50% { opacity: 0.3; transform: translateX(8px); }
         }
       `}</style>
     </section>
