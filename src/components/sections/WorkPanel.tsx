@@ -11,6 +11,7 @@ interface Repo {
   language: string;
   html_url: string;
   stargazers_count: number;
+  homepage?: string;
 }
 
 const LANG_COLORS: Record<string, string> = {
@@ -34,7 +35,8 @@ export const WorkPanel: React.FC<WorkPanelProps> = ({ onNavigate }) => {
       description: "An AI-powered academic assistant designed to streamline student workflow. Features include intelligent note-taking, assignment tracking, and collaborative study tools.",
       language: "TypeScript",
       html_url: "https://github.com/RoNnY125-coder/CampusMind",
-      stargazers_count: 2
+      stargazers_count: 2,
+      homepage: "https://campus-mind-flame.vercel.app/"
     },
     {
       id: 1121251552,
@@ -137,11 +139,8 @@ export const WorkPanel: React.FC<WorkPanelProps> = ({ onNavigate }) => {
                 const isHovered = hoveredId === repo.id;
                 const langColor = LANG_COLORS[repo.language] || '#8D1515';
                 return (
-                  <a
+                  <div
                     key={repo.id}
-                    href={repo.html_url}
-                    target="_blank"
-                    rel="noopener noreferrer"
                     className={getGridClasses(i)}
                     style={{
                       display: 'flex',
@@ -150,7 +149,6 @@ export const WorkPanel: React.FC<WorkPanelProps> = ({ onNavigate }) => {
                       padding: i === 0 ? '40px' : '24px', // Extra padding for feature block
                       background: isHovered ? '#251e1e' : '#1a1414',
                       border: `1px solid ${isHovered ? '#8D1515' : '#251e1e'}`,
-                      textDecoration: 'none',
                       position: 'relative',
                       overflow: 'hidden',
                       cursor: 'pointer',
@@ -158,6 +156,9 @@ export const WorkPanel: React.FC<WorkPanelProps> = ({ onNavigate }) => {
                       boxShadow: isHovered ? '0 16px 40px rgba(141,21,21,0.18)' : '0 0 0 transparent',
                       transition: 'all 300ms cubic-bezier(0.16,1,0.3,1)',
                       ...cardEnter(i + 1),
+                    }}
+                    onClick={() => {
+                        window.open(repo.homepage || repo.html_url, '_blank', 'noopener,noreferrer');
                     }}
                     onMouseEnter={() => setHoveredId(repo.id)}
                     onMouseLeave={() => setHoveredId(null)}
@@ -240,20 +241,27 @@ export const WorkPanel: React.FC<WorkPanelProps> = ({ onNavigate }) => {
                         height: isHovered ? '32px' : '0px',
                         transition: 'height 300ms cubic-bezier(0.16,1,0.3,1)',
                       }}>
-                        <span style={{
-                          display: 'inline-block',
-                          fontFamily: "'Epilogue', sans-serif", fontWeight: 900,
-                          fontSize: '10px', letterSpacing: '0.25em',
-                          textTransform: 'uppercase', color: '#181212',
-                          background: '#FFB3AE', padding: '6px 16px',
-                          transform: isHovered ? 'translateY(0)' : 'translateY(100%)',
-                          transition: 'transform 300ms cubic-bezier(0.16,1,0.3,1) 50ms',
-                        }}>
+                        <a
+                          href={repo.html_url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          onClick={(e) => e.stopPropagation()}
+                          style={{
+                            display: 'inline-block',
+                            fontFamily: "'Epilogue', sans-serif", fontWeight: 900,
+                            fontSize: '10px', letterSpacing: '0.25em',
+                            textTransform: 'uppercase', color: '#181212',
+                            background: '#FFB3AE', padding: '6px 16px',
+                            transform: isHovered ? 'translateY(0)' : 'translateY(100%)',
+                            transition: 'transform 300ms cubic-bezier(0.16,1,0.3,1) 50ms',
+                            textDecoration: 'none'
+                          }}
+                        >
                           ACCESS REPOSITORY →
-                        </span>
+                        </a>
                       </div>
                     </div>
-                  </a>
+                  </div>
                 );
               })
             ) : (
