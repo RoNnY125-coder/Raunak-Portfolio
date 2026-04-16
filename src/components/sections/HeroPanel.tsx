@@ -349,8 +349,6 @@ export const HeroPanel: React.FC<HeroPanelProps> = ({ onNavigate }) => {
             ))}
           </div>
         </div>
-
-        </div>
       </div>
 
       {/* Mobile: tagline shown below headline, hidden on large screens */}
