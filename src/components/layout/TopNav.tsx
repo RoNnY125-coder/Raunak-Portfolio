@@ -100,31 +100,6 @@ export const TopNav: React.FC<TopNavProps> = ({ currentPanel, onNavigate, onArch
         </a>
       </div>
 
-      {/* ── Floating HOME pill — appears when NOT on hero (panel 0) ── */}
-      {currentPanel !== 0 && (
-        <button
-          onClick={() => handleNav(0)}
-          className="fixed z-50 flex items-center gap-2 font-headline font-black uppercase text-[#FFB3AE] hover:text-[#ffdad7] transition-all duration-300 hover:scale-105"
-          style={{
-            bottom: '28px',
-            left: '50%',
-            transform: 'translateX(-50%)',
-            background: 'rgba(24,18,18,0.88)',
-            backdropFilter: 'blur(14px)',
-            border: '1px solid #3b3333',
-            padding: '9px 18px',
-            fontSize: '10px',
-            letterSpacing: '0.25em',
-            cursor: 'pointer',
-            boxShadow: '0 0 0 1px rgba(141,21,21,0.15)',
-          }}
-          onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = '#8D1515'; }}
-          onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = '#3b3333'; }}
-        >
-          <span className="material-symbols-outlined" style={{ fontSize: '14px' }}>home</span>
-          HOME
-        </button>
-      )}
     </>
   );
 };
