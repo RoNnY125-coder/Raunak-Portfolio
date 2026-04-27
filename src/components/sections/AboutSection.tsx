@@ -54,7 +54,7 @@ export function AboutSection() {
           className="md:col-span-7 space-y-8"
         >
           <p className="text-xl leading-[1.6] text-[#c6c6c7]" style={{ fontFamily: "'Inter', sans-serif" }}>
-            I'm an aspiring Frontend Developer with a strong foundation in UI/UX design. 
+            I'm an aspiring Full Stack Web Developer with a strong foundation in UI/UX design. 
             My journey in web development started with a curiosity about how beautiful, 
             functional interfaces come to life.
           </p>

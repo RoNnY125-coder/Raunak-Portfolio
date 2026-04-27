@@ -45,7 +45,7 @@ export function HeroSection() {
           className="mb-8 font-black text-xl md:text-3xl uppercase tracking-widest text-[#FFB3AE]"
           style={{ fontFamily: "'Epilogue', sans-serif" }}
         >
-          Frontend Developer &amp; UI/UX Designer
+          Full Stack Web Developer &amp; UI/UX Designer
         </motion.p>
 
         <motion.p

@@ -1,14 +1,14 @@
 # Raunak Sharma — Personal Portfolio
 
-A modern, responsive personal portfolio website showcasing my skills as an aspiring **Frontend Developer** with a strong foundation in **UI/UX design**.  
-This project is designed to reflect clean engineering practices, design thinking, and real-world frontend workflows.
+A modern, responsive personal portfolio website showcasing my skills as an aspiring **Full Stack Web Developer** with a strong foundation in **UI/UX design**.  
+This project is designed to reflect clean engineering practices, design thinking, and real-world workflows.
 
 ---
 
 ## 📌 Overview
 
-This portfolio presents my work, skills, and learning journey as a frontend-focused web developer.  
-It combines thoughtful UI/UX design with scalable frontend architecture to deliver a professional, recruiter-friendly experience.
+This portfolio presents my work, skills, and learning journey as a full stack web developer.  
+It combines thoughtful UI/UX design with scalable architecture to deliver a professional, recruiter-friendly experience.
 
 ---
 
