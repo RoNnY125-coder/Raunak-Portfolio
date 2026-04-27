@@ -73,7 +73,7 @@ export function HeroSection() {
           </button>
           
           <a 
-            href="/resume.pdf" 
+            href="/Raunak_Sharma_Resume.pdf" 
             target="_blank" 
             rel="noopener noreferrer"
             className="nav-link-el font-black uppercase text-sm tracking-widest text-[#FFB3AE]"

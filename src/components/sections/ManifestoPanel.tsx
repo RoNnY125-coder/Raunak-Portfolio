@@ -18,7 +18,7 @@ export const ManifestoPanel: React.FC<ManifestoPanelProps> = ({ onNavigate }) =>
 
   // IMPORTANT: Replace this URL with your actual hosted resume PDF URL
   // e.g. Google Drive share link, Vercel-hosted PDF, or GitHub raw file
-  const RESUME_URL = '/resume.pdf';
+  const RESUME_URL = '/Raunak_Sharma_Resume.pdf';
 
   return (
     <section className="w-screen h-screen flex-shrink-0 overflow-y-auto bg-[#181212]">
