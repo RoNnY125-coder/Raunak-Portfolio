@@ -12,6 +12,8 @@ interface Repo {
   html_url: string;
   stargazers_count: number;
   homepage?: string;
+  previewImage?: string;
+  previewPosition?: string;
 }
 
 const LANG_COLORS: Record<string, string> = {
@@ -20,15 +22,8 @@ const LANG_COLORS: Record<string, string> = {
   Go: '#00ADD8', Java: '#b07219', 'C++': '#f34b7d',
 };
 
-export const WorkPanel: React.FC<WorkPanelProps> = ({ onNavigate }) => {
-  const [repos, setRepos] = useState<Repo[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [hoveredId, setHoveredId] = useState<number | null>(null);
-  const [visible, setVisible] = useState(false);
-  const sectionRef = useRef<HTMLElement>(null);
-
-  // Static projects data for 100% reliability
-  const STATIC_REPOS: Repo[] = [
+// Static projects data for 100% reliability
+const STATIC_REPOS: Repo[] = [
     {
       id: 1187439861,
       name: "CampusMind",
@@ -36,7 +31,9 @@ export const WorkPanel: React.FC<WorkPanelProps> = ({ onNavigate }) => {
       language: "TypeScript",
       html_url: "https://github.com/RoNnY125-coder/CampusMind",
       stargazers_count: 2,
-      homepage: "https://campus-mind-flame.vercel.app/"
+      homepage: "https://campus-mind-flame.vercel.app/",
+      previewImage: "/work/campusmind.png",
+      previewPosition: "center",
     },
     {
       id: 1121251552,
@@ -44,7 +41,9 @@ export const WorkPanel: React.FC<WorkPanelProps> = ({ onNavigate }) => {
       description: "A modern, responsive admin interface built with React, Tailwind CSS, Chart.js, and Supabase. Features real-time analytics, inventory management, and order tracking.",
       language: "TypeScript",
       html_url: "https://github.com/RoNnY125-coder/E-commerce-Dashboard",
-      stargazers_count: 0
+      stargazers_count: 0,
+      previewImage: "/work/commerce-pro.png",
+      previewPosition: "left top",
     },
     {
       id: 1192321022,
@@ -52,7 +51,9 @@ export const WorkPanel: React.FC<WorkPanelProps> = ({ onNavigate }) => {
       description: "A smart AI/ML tool that parses resumes, evaluates skills, and provides insights to help recruiters and job seekers quickly assess qualifications.",
       language: "Python",
       html_url: "https://github.com/RoNnY125-coder/AI-Resume-Analyzer",
-      stargazers_count: 1
+      stargazers_count: 1,
+      previewImage: "/work/ai-resume-analyzer.png",
+      previewPosition: "center",
     },
     {
       id: 1169738071,
@@ -60,7 +61,7 @@ export const WorkPanel: React.FC<WorkPanelProps> = ({ onNavigate }) => {
       description: "A mobile banking app prototype designed to simulate modern fintech UI/UX flows. Focused on clean financial data presentation and secure interaction design.",
       language: "HTML",
       html_url: "https://github.com/RoNnY125-coder/Bankagement",
-      stargazers_count: 0
+      stargazers_count: 0,
     },
     {
       id: 1122638308,
@@ -68,9 +69,19 @@ export const WorkPanel: React.FC<WorkPanelProps> = ({ onNavigate }) => {
       description: "A modern collaborative task management app with drag-and-drop task boards, multiple task views, and seamless dark & light mode support.",
       language: "TypeScript",
       html_url: "https://github.com/RoNnY125-coder/Task-Management-App",
-      stargazers_count: 0
+      stargazers_count: 0,
+      previewImage: "/work/taskflow.png",
+      previewPosition: "center top",
     }
-  ];
+];
+
+export const WorkPanel: React.FC<WorkPanelProps> = ({ onNavigate }) => {
+  const [repos, setRepos] = useState<Repo[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [hoveredId, setHoveredId] = useState<number | null>(null);
+  const [visible, setVisible] = useState(false);
+  const sectionRef = useRef<HTMLElement>(null);
+
 
   useEffect(() => {
     // We now use static repos for the main grid to avoid API rate limits/failures
@@ -121,7 +132,7 @@ export const WorkPanel: React.FC<WorkPanelProps> = ({ onNavigate }) => {
             onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = '#FFB3AE'; (e.currentTarget as HTMLElement).style.borderColor = '#8D1515'; }}
             onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = '#c6c6c7'; (e.currentTarget as HTMLElement).style.borderColor = '#3b3333'; }}
           >
-            GITHUB ↗
+            GITHUB -&gt;
           </a>
         </div>
 
@@ -138,6 +149,7 @@ export const WorkPanel: React.FC<WorkPanelProps> = ({ onNavigate }) => {
               repos.map((repo, i) => {
                 const isHovered = hoveredId === repo.id;
                 const langColor = LANG_COLORS[repo.language] || '#8D1515';
+                const hasPreview = Boolean(repo.previewImage);
                 return (
                   <div
                     key={repo.id}
@@ -146,7 +158,7 @@ export const WorkPanel: React.FC<WorkPanelProps> = ({ onNavigate }) => {
                       display: 'flex',
                       flexDirection: 'column',
                       justifyContent: 'space-between',
-                      padding: i === 0 ? '40px' : '24px', // Extra padding for feature block
+                      padding: i === 0 ? '40px' : '24px',
                       background: isHovered ? '#251e1e' : '#1a1414',
                       border: `1px solid ${isHovered ? '#8D1515' : '#251e1e'}`,
                       position: 'relative',
@@ -163,8 +175,36 @@ export const WorkPanel: React.FC<WorkPanelProps> = ({ onNavigate }) => {
                     onMouseEnter={() => setHoveredId(repo.id)}
                     onMouseLeave={() => setHoveredId(null)}
                   >
-                    {/* Subtle Background Graphic for feature panels */}
-                    {(i === 0 || i === 2) && (
+                    {hasPreview ? (
+                      <div
+                        className="work-preview-frame"
+                        style={{
+                          top: i === 0 ? 28 : 18,
+                          left: i === 0 ? 28 : 18,
+                          right: i === 0 ? 28 : 18,
+                          height: i === 0 ? '58%' : i === 2 ? '62%' : '48%',
+                          zIndex: isHovered ? 2 : 1,
+                          transform: isHovered ? 'translateY(-6px) scale(1.02)' : 'translateY(0) scale(1)',
+                          borderColor: isHovered ? 'rgba(255,179,174,0.32)' : 'rgba(255,255,255,0.08)',
+                          boxShadow: isHovered ? '0 22px 54px rgba(0,0,0,0.36)' : '0 14px 34px rgba(0,0,0,0.22)',
+                        }}
+                      >
+                        <img
+                          src={repo.previewImage}
+                          alt={`${repo.name.replace(/-/g, ' ')} app screenshot`}
+                          draggable={false}
+                          style={{
+                            width: '100%',
+                            height: '100%',
+                            objectFit: 'cover',
+                            objectPosition: repo.previewPosition || 'center',
+                            filter: isHovered ? 'grayscale(0%) contrast(1.04) brightness(1)' : 'grayscale(100%) contrast(1.1) brightness(0.68)',
+                            transform: isHovered ? 'scale(1.03)' : 'scale(1)',
+                            transition: 'filter 520ms cubic-bezier(0.16,1,0.3,1), transform 700ms cubic-bezier(0.16,1,0.3,1)',
+                          }}
+                        />
+                      </div>
+                    ) : (
                       <div style={{
                         position: 'absolute', inset: 0, opacity: isHovered ? 0.08 : 0.03,
                         background: `radial-gradient(circle at 100% 100%, #FFB3AE, transparent 65%)`,
@@ -174,20 +214,22 @@ export const WorkPanel: React.FC<WorkPanelProps> = ({ onNavigate }) => {
 
                     {/* Ghost number */}
                     <span style={{
-                      position: 'absolute', bottom: '-8px', right: '12px',
+                      position: 'absolute', top: hasPreview ? (i === 0 ? '18%' : '12%') : 'auto', bottom: hasPreview ? 'auto' : '-8px', right: '12px',
                       fontFamily: "'Epilogue', sans-serif", fontWeight: 900,
-                      fontSize: i === 0 ? '12rem' : '6rem', 
-                      color: '#251e1e',
+                      fontSize: i === 0 ? '12rem' : i === 2 ? '8rem' : '6rem',
+                      color: hasPreview ? (isHovered ? 'rgba(255,179,174,0.08)' : 'rgba(255,179,174,0.18)') : '#251e1e',
                       lineHeight: 1, pointerEvents: 'none', userSelect: 'none',
-                      transition: 'color 300ms',
-                      ...(isHovered ? { color: '#302828' } : {}),
-                      zIndex: 0,
+                      transition: 'color 420ms cubic-bezier(0.16,1,0.3,1), transform 520ms cubic-bezier(0.16,1,0.3,1), opacity 420ms',
+                      transform: hasPreview && isHovered ? 'translate3d(12px, 12px, 0) scale(0.94)' : 'translate3d(0, 0, 0) scale(1)',
+                      opacity: hasPreview ? (isHovered ? 0.7 : 1) : 1,
+                      zIndex: hasPreview ? (isHovered ? 0 : 2) : 0,
+                      textShadow: hasPreview && !isHovered ? '0 18px 45px rgba(0,0,0,0.34)' : 'none',
                     }}>
                       {String(i + 1).padStart(2, '0')}
                     </span>
 
                     {/* Top: language + arrow */}
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '12px', position: 'relative', zIndex: 1 }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '12px', position: 'relative', zIndex: 3 }}>
                       {repo.language && (
                         <span style={{
                           fontFamily: "'Inter', sans-serif", fontSize: '9px',
@@ -208,7 +250,7 @@ export const WorkPanel: React.FC<WorkPanelProps> = ({ onNavigate }) => {
                       </span>
                     </div>
 
-                    <div style={{ position: 'relative', zIndex: 1, marginTop: 'auto' }}>
+                    <div style={{ position: 'relative', zIndex: 3, marginTop: 'auto' }}>
                       {/* Repo name */}
                       <h3 style={{
                         fontFamily: "'Epilogue', sans-serif", fontWeight: 900,
@@ -229,7 +271,7 @@ export const WorkPanel: React.FC<WorkPanelProps> = ({ onNavigate }) => {
                           color: '#c6c6c7', margin: '0 0 16px', lineHeight: 1.6,
                           display: '-webkit-box', WebkitLineClamp: i === 0 ? 3 : 2,
                           WebkitBoxOrient: 'vertical', overflow: 'hidden',
-                          maxWidth: i === 0 ? '75%' : '100%',
+                          maxWidth: i === 0 ? '78%' : '100%',
                         }}>
                           {repo.description}
                         </p>
@@ -257,7 +299,7 @@ export const WorkPanel: React.FC<WorkPanelProps> = ({ onNavigate }) => {
                             textDecoration: 'none'
                           }}
                         >
-                          ACCESS REPOSITORY →
+                          ACCESS REPOSITORY -&gt;
                         </a>
                       </div>
                     </div>
@@ -277,6 +319,35 @@ export const WorkPanel: React.FC<WorkPanelProps> = ({ onNavigate }) => {
         @keyframes shimmer {
           0%, 100% { opacity: 0.4; }
           50% { opacity: 0.7; }
+        }
+        .work-preview-frame {
+          position: absolute;
+          overflow: hidden;
+          border: 1px solid rgba(255,255,255,0.08);
+          background: #100c0c;
+          pointer-events: none;
+          transition:
+            transform 560ms cubic-bezier(0.16,1,0.3,1),
+            border-color 420ms ease,
+            box-shadow 520ms ease;
+        }
+        .work-preview-frame::after {
+          content: "";
+          position: absolute;
+          inset: 0;
+          background:
+            linear-gradient(to bottom, rgba(24,18,18,0.06), rgba(24,18,18,0.18)),
+            linear-gradient(to top, rgba(24,18,18,0.5), transparent 45%);
+          opacity: 1;
+          transition: opacity 420ms ease;
+        }
+        div:hover > .work-preview-frame::after {
+          opacity: 0.55;
+        }
+        @media (max-width: 767px) {
+          .work-preview-frame {
+            height: 46% !important;
+          }
         }
       `}</style>
     </section>
