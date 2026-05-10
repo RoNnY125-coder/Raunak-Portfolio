@@ -25,6 +25,19 @@ const certifications = [
 
 const BG_COLORS = ['#1e1818', '#211a1a', '#251e1e', '#2a2020', '#1e1818'];
 
+const REPO_PREVIEWS: Record<string, { image: string; position?: string }> = {
+  campusmind: { image: '/work/campusmind.png', position: 'center' },
+  'e-commerce-dashboard': { image: '/work/commerce-pro.png', position: 'left top' },
+  'task-management-app': { image: '/work/taskflow.png', position: 'center top' },
+  stackaudit: { image: '/work/stack-audit.png', position: 'center top' },
+  'matdan-ai': { image: '/work/matdan-ai.png', position: 'center top' },
+};
+
+const getRepoPreview = (name: string) => {
+  const slug = name.toLowerCase().replace(/[\s_]+/g, '-');
+  return REPO_PREVIEWS[slug] || REPO_PREVIEWS[slug.replace(/-/g, '')];
+};
+
 export function ArchivePanel({ isOpen, onClose }: ArchivePanelProps) {
   const [repos, setRepos] = useState<GitHubRepo[]>([]);
   const [loading, setLoading] = useState(true);
@@ -140,6 +153,7 @@ export function ArchivePanel({ isOpen, onClose }: ArchivePanelProps) {
                 ))
               : repos.map((repo, i) => {
                   const isH = hoveredRepo === repo.id;
+                  const preview = getRepoPreview(repo.name);
                   return (
                     <a key={repo.id} href={repo.html_url} target="_blank" rel="noopener noreferrer"
                       style={{
@@ -155,14 +169,36 @@ export function ArchivePanel({ isOpen, onClose }: ArchivePanelProps) {
                       onMouseEnter={() => setHoveredRepo(repo.id)}
                       onMouseLeave={() => setHoveredRepo(null)}
                     >
+                      {preview && (
+                        <div className="archive-preview-frame" style={{
+                          zIndex: isH ? 2 : 1,
+                          transform: isH ? 'translateY(-5px) scale(1.025)' : 'translateY(0) scale(1)',
+                          borderColor: isH ? 'rgba(255,179,174,0.28)' : 'rgba(255,255,255,0.07)',
+                        }}>
+                          <img
+                            src={preview.image}
+                            alt={`${repo.name.replace(/-/g, ' ')} app screenshot`}
+                            draggable={false}
+                            style={{
+                              width: '100%',
+                              height: '100%',
+                              objectFit: 'cover',
+                              objectPosition: preview.position || 'center',
+                              filter: isH ? 'grayscale(0%) contrast(1.04) brightness(1)' : 'grayscale(100%) contrast(1.08) brightness(0.62)',
+                              transform: isH ? 'scale(1.035)' : 'scale(1)',
+                              transition: 'filter 520ms cubic-bezier(0.16,1,0.3,1), transform 700ms cubic-bezier(0.16,1,0.3,1)',
+                            }}
+                          />
+                        </div>
+                      )}
                       {/* Ghost number */}
-                      <span style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)', fontFamily: "'Epilogue', sans-serif", fontWeight: 900, fontSize: '7rem', color: isH ? '#3b3333' : '#251e1e', opacity: 0.6, userSelect: 'none', pointerEvents: 'none', lineHeight: 1, transition: 'color 280ms' }}>
+                      <span style={{ position: 'absolute', top: '50%', left: '50%', transform: preview && isH ? 'translate(-46%,-45%) scale(0.94)' : 'translate(-50%,-50%) scale(1)', fontFamily: "'Epilogue', sans-serif", fontWeight: 900, fontSize: '7rem', color: preview ? (isH ? 'rgba(255,179,174,0.08)' : 'rgba(255,179,174,0.18)') : (isH ? '#3b3333' : '#251e1e'), opacity: preview ? (isH ? 0.7 : 1) : 0.6, userSelect: 'none', pointerEvents: 'none', lineHeight: 1, transition: 'color 280ms, transform 420ms cubic-bezier(0.16,1,0.3,1), opacity 280ms', zIndex: preview ? (isH ? 0 : 2) : 0, textShadow: preview && !isH ? '0 14px 36px rgba(0,0,0,0.38)' : 'none' }}>
                         {String(i + 1).padStart(2, '0')}
                       </span>
                       {/* Arrow */}
-                      <span className="material-symbols-outlined" style={{ position: 'absolute', top: 14, right: 14, fontSize: 18, color: isH ? '#FFB3AE' : '#3b3333', transition: 'color 280ms, transform 280ms', transform: isH ? 'translate(2px,-2px)' : 'translate(0,0)' }}>north_east</span>
+                      <span className="material-symbols-outlined" style={{ position: 'absolute', top: 14, right: 14, fontSize: 18, color: isH ? '#FFB3AE' : '#3b3333', transition: 'color 280ms, transform 280ms', transform: isH ? 'translate(2px,-2px)' : 'translate(0,0)', zIndex: 4 }}>north_east</span>
                       {/* Bottom content */}
-                      <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: '40px 20px 20px', background: 'linear-gradient(to top, rgba(24,18,18,0.98), transparent)' }}>
+                      <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: '40px 20px 20px', background: 'linear-gradient(to top, rgba(24,18,18,0.98), rgba(24,18,18,0.74) 48%, transparent)', zIndex: 3 }}>
                         {repo.language && (
                           <span style={{ background: '#8d1515', color: '#ff998f', padding: '2px 8px', fontSize: 9, textTransform: 'uppercase', letterSpacing: '0.1em', fontFamily: "'Inter',sans-serif", display: 'inline-block', marginBottom: 8 }}>{repo.language}</span>
                         )}
@@ -237,6 +273,33 @@ export function ArchivePanel({ isOpen, onClose }: ArchivePanelProps) {
 
       <style>{`
         @keyframes shimmer { 0%,100% { opacity: 0.4; } 50% { opacity: 0.7; } }
+        .archive-preview-frame {
+          position: absolute;
+          top: 14px;
+          left: 14px;
+          right: 14px;
+          height: 132px;
+          overflow: hidden;
+          border: 1px solid rgba(255,255,255,0.07);
+          background: #100c0c;
+          pointer-events: none;
+          transition:
+            transform 560ms cubic-bezier(0.16,1,0.3,1),
+            border-color 420ms ease;
+        }
+        .archive-preview-frame::after {
+          content: "";
+          position: absolute;
+          inset: 0;
+          background:
+            linear-gradient(to bottom, rgba(24,18,18,0.06), rgba(24,18,18,0.22)),
+            linear-gradient(to top, rgba(24,18,18,0.52), transparent 56%);
+          opacity: 1;
+          transition: opacity 420ms ease;
+        }
+        a:hover > .archive-preview-frame::after {
+          opacity: 0.5;
+        }
       `}</style>
     </>
   );
