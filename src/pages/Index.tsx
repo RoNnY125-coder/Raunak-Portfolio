@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { TopNav } from '../components/layout/TopNav';
-import { Sidebar } from '../components/layout/Sidebar';
 import { HeroPanel } from '../components/sections/HeroPanel';
 import { WorkPanel } from '../components/sections/WorkPanel';
 import { ManifestoPanel } from '../components/sections/ManifestoPanel';
@@ -21,21 +20,24 @@ const Index = () => {
     setTimeout(() => setIsAnimating(false), 700);
   }, [isAnimating, currentPanel, totalPanels]);
 
-  // Wheel navigation — disabled when archive is open
   useEffect(() => {
     let wheelTimeout: ReturnType<typeof setTimeout>;
     const handleWheel = (e: WheelEvent) => {
       if (archiveOpen) return;
+
       const target = e.target as HTMLElement;
-      const isScrollable = target.closest('.overflow-y-auto');
-      if (isScrollable) {
-        const sc = target.closest('.overflow-y-auto') as HTMLElement;
-        if (sc) {
-          const atTop = sc.scrollTop <= 0;
-          const atBottom = Math.abs(sc.scrollHeight - sc.clientHeight - sc.scrollTop) < 1;
-          if ((e.deltaY < 0 && !atTop) || (e.deltaY > 0 && !atBottom)) return;
+      const scrollPanel = target.closest('.scroll-panel, .overflow-y-auto') as HTMLElement | null;
+
+      if (scrollPanel) {
+        const atTop = scrollPanel.scrollTop <= 0;
+        const atBottom = Math.abs(scrollPanel.scrollHeight - scrollPanel.clientHeight - scrollPanel.scrollTop) < 2;
+        const wantsVerticalScroll = Math.abs(e.deltaY) >= Math.abs(e.deltaX);
+
+        if (wantsVerticalScroll && ((e.deltaY < 0 && !atTop) || (e.deltaY > 0 && !atBottom))) {
+          return;
         }
       }
+
       e.preventDefault();
       clearTimeout(wheelTimeout);
       wheelTimeout = setTimeout(() => {
@@ -48,14 +50,20 @@ const Index = () => {
         }
       }, 50);
     };
+
     window.addEventListener('wheel', handleWheel, { passive: false });
-    return () => { window.removeEventListener('wheel', handleWheel); clearTimeout(wheelTimeout); };
+    return () => {
+      window.removeEventListener('wheel', handleWheel);
+      clearTimeout(wheelTimeout);
+    };
   }, [currentPanel, goToPanel, archiveOpen]);
 
-  // Keyboard navigation
   useEffect(() => {
     const handleKey = (e: KeyboardEvent) => {
-      if (archiveOpen) { if (e.key === 'Escape') setArchiveOpen(false); return; }
+      if (archiveOpen) {
+        if (e.key === 'Escape') setArchiveOpen(false);
+        return;
+      }
       if (e.key === 'ArrowRight') goToPanel(currentPanel + 1);
       if (e.key === 'ArrowLeft') goToPanel(currentPanel - 1);
     };
@@ -63,21 +71,28 @@ const Index = () => {
     return () => window.removeEventListener('keydown', handleKey);
   }, [currentPanel, goToPanel, archiveOpen]);
 
-  // Touch navigation
   useEffect(() => {
     let touchStartX = 0;
-    const handleTouchStart = (e: TouchEvent) => { touchStartX = e.touches[0].clientX; };
+    let touchStartY = 0;
+    const handleTouchStart = (e: TouchEvent) => {
+      touchStartX = e.touches[0].clientX;
+      touchStartY = e.touches[0].clientY;
+    };
     const handleTouchEnd = (e: TouchEvent) => {
       if (archiveOpen) return;
-      const diff = touchStartX - e.changedTouches[0].clientX;
-      if (Math.abs(diff) > 50) {
-        if (diff > 0) goToPanel(currentPanel + 1);
+      const diffX = touchStartX - e.changedTouches[0].clientX;
+      const diffY = touchStartY - e.changedTouches[0].clientY;
+      if (Math.abs(diffX) > 54 && Math.abs(diffX) > Math.abs(diffY) * 1.35) {
+        if (diffX > 0) goToPanel(currentPanel + 1);
         else goToPanel(currentPanel - 1);
       }
     };
     window.addEventListener('touchstart', handleTouchStart);
     window.addEventListener('touchend', handleTouchEnd);
-    return () => { window.removeEventListener('touchstart', handleTouchStart); window.removeEventListener('touchend', handleTouchEnd); };
+    return () => {
+      window.removeEventListener('touchstart', handleTouchStart);
+      window.removeEventListener('touchend', handleTouchEnd);
+    };
   }, [currentPanel, goToPanel, archiveOpen]);
 
   useEffect(() => {
@@ -90,9 +105,7 @@ const Index = () => {
   return (
     <div className="w-screen h-screen overflow-hidden relative bg-[#181212] text-[#eedfdf]">
       <TopNav currentPanel={currentPanel} onNavigate={goToPanel} onArchiveOpen={() => setArchiveOpen(true)} />
-      <Sidebar currentPanel={currentPanel} onNavigate={goToPanel} onArchiveOpen={() => setArchiveOpen(true)} archiveOpen={archiveOpen} />
 
-      {/* Main horizontal track — dims when archive is open */}
       <div
         style={{
           width: `${totalPanels * 100}vw`,
@@ -115,26 +128,24 @@ const Index = () => {
         <ContactPanel />
       </div>
 
-      {/* Panel label */}
-      <div className="fixed bottom-8 left-8 z-50 lg:left-32 pointer-events-none" style={{ opacity: archiveOpen ? 0 : 1, transition: 'opacity 300ms ease' }}>
-        <p className="font-label text-xs tracking-[0.4em] text-[#c6c6c7] uppercase">{panelNames[currentPanel]}</p>
+      <div className="panel-label" style={{ opacity: archiveOpen ? 0 : 1 }}>
+        <p>{panelNames[currentPanel]}</p>
       </div>
 
-      {/* Panel indicators */}
-      <div className="fixed bottom-8 right-8 z-50 flex flex-col gap-3" style={{ opacity: archiveOpen ? 0 : 1, transition: 'opacity 300ms ease' }}>
+      <div className="panel-indicators" style={{ opacity: archiveOpen ? 0 : 1 }}>
         {['01', '02', '03', '04'].map((num, i) => (
-          <button key={i} onClick={() => goToPanel(i)}
-            className={`font-headline font-black text-xs tracking-widest transition-all duration-300 transform ${
-              i === currentPanel 
-                ? 'text-[#FFB3AE] scale-125 translate-x-[-4px]' 
-                : 'text-[#3B3333] hover:text-[#FFB3AE] hover:scale-125 hover:-translate-y-1'
-            }`}>
+          <button
+            key={num}
+            type="button"
+            onClick={() => goToPanel(i)}
+            className={i === currentPanel ? 'is-active' : ''}
+            aria-label={`Go to ${panelNames[i]}`}
+          >
             {num}
           </button>
         ))}
       </div>
 
-      {/* Archive Overlay — slides in from RIGHT */}
       <ArchivePanel isOpen={archiveOpen} onClose={() => setArchiveOpen(false)} />
     </div>
   );

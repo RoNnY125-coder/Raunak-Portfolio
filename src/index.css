@@ -736,3 +736,162 @@ a, button { transition: color 250ms ease, border-color 250ms ease, box-shadow 25
     transform: none;
   }
 }
+
+/* Sidebar-free fixed navigation furniture */
+.panel-label {
+  position: fixed;
+  left: clamp(18px, 3.4vw, 48px);
+  bottom: clamp(18px, 3vh, 32px);
+  z-index: 50;
+  pointer-events: none;
+  transition: opacity 300ms ease;
+}
+
+.panel-label p {
+  margin: 0;
+  color: #c6c6c7;
+  font-family: 'Inter', sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.34em;
+  text-transform: uppercase;
+}
+
+.panel-indicators {
+  position: fixed;
+  right: clamp(18px, 3.4vw, 48px);
+  top: 50%;
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  transform: translateY(-50%);
+  transition: opacity 300ms ease;
+}
+
+.panel-indicators button {
+  width: 36px;
+  height: 28px;
+  border: 0;
+  background: transparent;
+  color: #59413e;
+  cursor: pointer;
+  font-family: 'Epilogue', sans-serif;
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 0.18em;
+  text-align: right;
+}
+
+.panel-indicators button::after {
+  content: '';
+  display: inline-block;
+  width: 10px;
+  height: 1px;
+  margin-left: 8px;
+  vertical-align: middle;
+  background: currentColor;
+  transform: scaleX(0.45);
+  transform-origin: right center;
+  transition: transform 240ms ease, background 240ms ease;
+}
+
+.panel-indicators button:hover,
+.panel-indicators button.is-active {
+  color: #ffb3ae;
+}
+
+.panel-indicators button:hover::after,
+.panel-indicators button.is-active::after {
+  transform: scaleX(1.35);
+}
+
+.scroll-panel {
+  scrollbar-width: thin;
+  scrollbar-color: #8d1515 #181212;
+  overscroll-behavior: contain;
+}
+
+.scroll-panel::-webkit-scrollbar {
+  width: 8px;
+}
+
+.scroll-panel::-webkit-scrollbar-track {
+  background: #181212;
+}
+
+.scroll-panel::-webkit-scrollbar-thumb {
+  min-height: 56px;
+  border: 2px solid #181212;
+  background: linear-gradient(180deg, #ffb3ae, #8d1515);
+}
+
+.scroll-panel::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #ffdad7, #a51618);
+}
+
+@media (max-width: 767px) {
+  .panel-label {
+    left: 18px;
+    bottom: 18px;
+    max-width: calc(100vw - 112px);
+  }
+
+  .panel-label p {
+    font-size: 9px;
+    letter-spacing: 0.22em;
+  }
+
+  .panel-indicators {
+    top: auto;
+    right: 16px;
+    bottom: 16px;
+    flex-direction: row;
+    gap: 4px;
+    transform: none;
+  }
+
+  .panel-indicators button {
+    width: 30px;
+    text-align: center;
+  }
+
+  .panel-indicators button::after {
+    display: none;
+  }
+}
+
+/* Final viewport and scroll cue refinements */
+.contact-panel {
+  height: 100vh;
+  min-height: 100vh;
+}
+
+.hero-scroll-cue div {
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-scroll-cue i {
+  width: 42%;
+  transform-origin: left center;
+  animation: scrollSweepX 1.9s cubic-bezier(0.16, 1, 0.3, 1) infinite;
+}
+
+@keyframes scrollSweepX {
+  0% { opacity: 0; transform: translateX(-110%) scaleX(0.65); }
+  18% { opacity: 1; }
+  58% { opacity: 1; transform: translateX(70%) scaleX(1); }
+  100% { opacity: 0; transform: translateX(210%) scaleX(0.72); }
+}
+
+@media (min-width: 1440px) {
+  .hero-main {
+    padding-left: clamp(80px, 7vw, 128px);
+    padding-right: clamp(80px, 7vw, 128px);
+  }
+
+  .contact-shell {
+    width: min(100%, 1180px);
+  }
+}

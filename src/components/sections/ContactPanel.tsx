@@ -50,7 +50,7 @@ export const ContactPanel: React.FC = () => {
   };
 
   return (
-    <section className="contact-panel">
+    <section className="contact-panel scroll-panel">
       <div className="contact-grid" />
 
       <div className="contact-shell">

@@ -21,7 +21,7 @@ export const ManifestoPanel: React.FC<ManifestoPanelProps> = ({ onNavigate }) =>
   const RESUME_URL = '/Raunak_Sharma_Resume.pdf';
 
   return (
-    <section className="w-screen h-screen flex-shrink-0 overflow-y-auto bg-[#181212]">
+    <section className="scroll-panel w-screen h-screen flex-shrink-0 overflow-y-auto bg-[#181212]">
       <div className="px-6 sm:px-10 md:px-16 pt-28 sm:pt-32 pb-24 max-w-7xl mx-auto relative">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24 items-start">
 
