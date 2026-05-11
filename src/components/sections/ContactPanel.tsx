@@ -1,144 +1,128 @@
 import React, { useState } from 'react';
 
+type FormStatus = 'idle' | 'sending' | 'sent' | 'error';
+
 export const ContactPanel: React.FC = () => {
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
-  const [status, setStatus] = useState<'idle' | 'sending' | 'sent'>('idle');
+  const [status, setStatus] = useState<FormStatus>('idle');
+  const [errorMessage, setErrorMessage] = useState('');
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!formData.name || !formData.email || !formData.message) return;
+    const name = formData.name.trim();
+    const email = formData.email.trim();
+    const projectIdea = formData.message.trim();
+
+    if (!name || !email || !projectIdea) return;
+
     setStatus('sending');
-    setTimeout(() => {
+    setErrorMessage('');
+
+    try {
+      const response = await fetch('/api/send-email', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, email, projectIdea }),
+      });
+
+      if (!response.ok) {
+        const payload = await response.json().catch(() => null);
+        throw new Error(payload?.error || 'Unable to send message right now.');
+      }
+
       setStatus('sent');
       setFormData({ name: '', email: '', message: '' });
-      setTimeout(() => setStatus('idle'), 3000);
-    }, 1200);
+      setTimeout(() => setStatus('idle'), 3500);
+    } catch (error) {
+      setStatus('error');
+      setErrorMessage(error instanceof Error ? error.message : 'Unable to send message right now.');
+    }
+  };
+
+  const updateField = (field: keyof typeof formData) => (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    setFormData(current => ({ ...current, [field]: e.target.value }));
+    if (status === 'error') {
+      setStatus('idle');
+      setErrorMessage('');
+    }
   };
 
   return (
-    <section className="w-screen h-screen flex-shrink-0 overflow-y-auto relative flex flex-col" style={{ background: '#930616' }}>
-      {/* 12-column grid overlay */}
-      <div className="absolute inset-0 pointer-events-none" style={{ opacity: 0.08 }}>
-        <div className="grid grid-cols-12 h-full w-full">
-          {Array.from({ length: 12 }).map((_, i) => (
-            <div key={i} style={{ borderRight: '1px solid #ff9b95', height: '100%' }} />
-          ))}
-        </div>
-      </div>
+    <section className="contact-panel">
+      <div className="contact-grid" />
 
-      <div className="relative z-10 px-8 md:px-24 pt-32 pb-16 w-full flex flex-col items-center min-h-screen">
-        {/* Giant headline — "Let's Build the Future" */}
-        <div className="w-full mb-12">
-          <h2
-            className="font-headline font-black text-[#ffdad7] uppercase tracking-tighter text-center leading-[0.85] mb-10 sm:mb-16"
-            style={{ fontSize: 'clamp(2.8rem, 10vw, 9rem)' }}
-          >
-            LET'S BUILD<br />THE FUTURE.
+      <div className="contact-shell">
+        <div className="contact-heading-block">
+          <p>Project inquiry</p>
+          <h2>
+            LET'S BUILD
+            <br />
+            THE FUTURE.
           </h2>
+          <span>Tell me what you want to make. I will receive your name, email, and project idea directly.</span>
         </div>
 
-        {/* Contact form */}
-        <form onSubmit={handleSubmit} className="w-full max-w-2xl mx-auto">
-          {/* Name */}
-          <div className="relative mb-10">
-            <label style={{ display: 'block', fontFamily: "'Inter', sans-serif", fontSize: 10, letterSpacing: '0.3em', color: 'rgba(255,154,143,0.7)', textTransform: 'uppercase', marginBottom: 8 }}>
-              NAME / IDENTITY
+        <form onSubmit={handleSubmit} className="contact-form">
+          <div className="contact-field-grid">
+            <label>
+              <span>NAME / IDENTITY</span>
+              <input
+                type="text"
+                value={formData.name}
+                onChange={updateField('name')}
+                placeholder="Your name"
+                autoComplete="name"
+                required
+              />
             </label>
-            <input
-              type="text"
-              value={formData.name}
-              onChange={e => setFormData({ ...formData, name: e.target.value })}
-              placeholder="YOUR NAME"
-              required
-              style={{ width: '100%', background: 'transparent', border: 'none', borderBottom: '1px solid rgba(255,154,143,0.3)', color: '#ffdad7', padding: '12px 0', fontSize: 16, fontFamily: "'Inter', sans-serif", outline: 'none', boxSizing: 'border-box' }}
-              onFocus={e => { e.target.style.borderBottomColor = '#FFB3AE'; e.target.style.borderBottomWidth = '2px'; }}
-              onBlur={e => { e.target.style.borderBottomColor = 'rgba(255,154,143,0.3)'; e.target.style.borderBottomWidth = '1px'; }}
-            />
+
+            <label>
+              <span>EMAIL ADDRESS</span>
+              <input
+                type="email"
+                value={formData.email}
+                onChange={updateField('email')}
+                placeholder="you@email.com"
+                autoComplete="email"
+                required
+              />
+            </label>
           </div>
 
-          {/* Email */}
-          <div className="relative mb-10">
-            <label style={{ display: 'block', fontFamily: "'Inter', sans-serif", fontSize: 10, letterSpacing: '0.3em', color: 'rgba(255,154,143,0.7)', textTransform: 'uppercase', marginBottom: 8 }}>
-              EMAIL ADDRESS
-            </label>
-            <input
-              type="email"
-              value={formData.email}
-              onChange={e => setFormData({ ...formData, email: e.target.value })}
-              placeholder="YOUR@EMAIL.COM"
-              required
-              style={{ width: '100%', background: 'transparent', border: 'none', borderBottom: '1px solid rgba(255,154,143,0.3)', color: '#ffdad7', padding: '12px 0', fontSize: 16, fontFamily: "'Inter', sans-serif", outline: 'none', boxSizing: 'border-box' }}
-              onFocus={e => { e.target.style.borderBottomColor = '#FFB3AE'; e.target.style.borderBottomWidth = '2px'; }}
-              onBlur={e => { e.target.style.borderBottomColor = 'rgba(255,154,143,0.3)'; e.target.style.borderBottomWidth = '1px'; }}
-            />
-          </div>
-
-          {/* Message */}
-          <div className="relative mb-10">
-            <label style={{ display: 'block', fontFamily: "'Inter', sans-serif", fontSize: 10, letterSpacing: '0.3em', color: 'rgba(255,154,143,0.7)', textTransform: 'uppercase', marginBottom: 8 }}>
-              COMMUNICATION BRIEF
-            </label>
+          <label>
+            <span>PROJECT IDEA</span>
             <textarea
-              rows={4}
+              rows={5}
               value={formData.message}
-              onChange={e => setFormData({ ...formData, message: e.target.value })}
-              placeholder="TELL ME ABOUT YOUR PROJECT"
+              onChange={updateField('message')}
+              placeholder="Tell me about your website, app, dashboard, AI tool, redesign, or collaboration."
               required
-              style={{ width: '100%', background: 'transparent', border: 'none', borderBottom: '1px solid rgba(255,154,143,0.3)', color: '#ffdad7', padding: '12px 0', fontSize: 16, fontFamily: "'Inter', sans-serif", outline: 'none', resize: 'none', boxSizing: 'border-box' }}
-              onFocus={e => { e.target.style.borderBottomColor = '#FFB3AE'; e.target.style.borderBottomWidth = '2px'; }}
-              onBlur={e => { e.target.style.borderBottomColor = 'rgba(255,154,143,0.3)'; e.target.style.borderBottomWidth = '1px'; }}
             />
-          </div>
+          </label>
 
-          {/* Submit */}
-          <button
-            type="submit"
-            disabled={status !== 'idle'}
-            style={{
-              width: '100%',
-              background: '#181212',
-              color: '#FFB3AE',
-              fontFamily: "'Epilogue', sans-serif",
-              fontWeight: 900,
-              fontSize: 20,
-              padding: '20px 48px',
-              borderBottom: '8px solid #8D1515',
-              border: 'none',
-              borderBottom: '8px solid #8D1515',
-              cursor: status !== 'idle' ? 'not-allowed' : 'pointer',
-              textTransform: 'uppercase',
-              letterSpacing: '0.2em',
-              marginTop: 8,
-              opacity: status !== 'idle' ? 0.6 : 1,
-              transition: 'transform 300ms ease',
-            }}
-            onMouseEnter={e => { if (status === 'idle') (e.target as HTMLElement).style.transform = 'translateY(4px)'; }}
-            onMouseLeave={e => { (e.target as HTMLElement).style.transform = 'translateY(0)'; }}
-          >
-            {status === 'idle' ? 'SEND SIGNAL' : status === 'sending' ? 'SENDING...' : '✓ SIGNAL SENT'}
+          <button type="submit" disabled={status === 'sending' || status === 'sent'}>
+            {status === 'sending' ? 'SENDING...' : status === 'sent' ? 'MESSAGE SENT' : 'SEND PROJECT IDEA'}
           </button>
+
+          {status === 'sent' && <p className="contact-status success">Thanks. Your message has been sent to Raunak.</p>}
+          {status === 'error' && <p className="contact-status error">{errorMessage}</p>}
         </form>
 
-        {/* Social links */}
-        <div className="flex flex-wrap gap-8 md:gap-12 justify-center mt-12">
+        <div className="contact-links">
           {[
-            { label: 'GITHUB ↗', href: 'https://github.com/RoNnY125-coder' },
-            { label: 'LINKEDIN ↗', href: 'https://www.linkedin.com/in/raunak-sharma-b91650344' },
-            { label: 'INSTAGRAM ↗', href: 'https://www.instagram.com/basically._.raunak' },
+            { label: 'GITHUB', href: 'https://github.com/RoNnY125-coder' },
+            { label: 'LINKEDIN', href: 'https://www.linkedin.com/in/raunak-sharma-b91650344' },
+            { label: 'INSTAGRAM', href: 'https://www.instagram.com/basically._.raunak' },
           ].map(link => (
-            <a key={link.label} href={link.href} target="_blank" rel="noopener noreferrer"
-              style={{ fontFamily: "'Epilogue', sans-serif", fontWeight: 700, letterSpacing: '0.15em', color: '#ffdad7', textDecoration: 'none', textTransform: 'uppercase', fontSize: 14, transition: 'color 300ms' }}
-              onMouseEnter={e => { (e.target as HTMLElement).style.color = '#FFB3AE'; }}
-              onMouseLeave={e => { (e.target as HTMLElement).style.color = '#ffdad7'; }}
-            >
+            <a key={link.label} href={link.href} target="_blank" rel="noopener noreferrer">
               {link.label}
             </a>
           ))}
         </div>
 
-        <p style={{ fontFamily: "'Inter', sans-serif", fontSize: 10, letterSpacing: '0.4em', color: 'rgba(255,179,174,0.5)', textTransform: 'uppercase', marginTop: 24, textAlign: 'center' }}>
-          DELHI, INDIA — AVAILABLE FOR OPPORTUNITIES
-        </p>
+        <p className="contact-location">DELHI, INDIA - AVAILABLE FOR OPPORTUNITIES</p>
       </div>
     </section>
   );
