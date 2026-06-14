@@ -1,7 +1,7 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
 
 const RESEND_API_KEY = process.env.RESEND_API_KEY;
-const OWNER_EMAIL = "raunaksh75@gmail.com";
+const OWNER_EMAIL = "theronnystack@gmail.com";
 const FROM_ADDRESS = process.env.RESEND_FROM_EMAIL || "Portfolio Contact <onboarding@resend.dev>";
 
 const escapeHtml = (value: string) =>
