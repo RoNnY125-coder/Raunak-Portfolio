@@ -107,7 +107,7 @@ export function ContactSection() {
     try {
       const emails = await generateEmails(name, email, message);
       await sendEmail(email, emails.visitor_reply.subject, emails.visitor_reply.body);
-      await sendEmail("raunaksh75@gmail.com", emails.owner_summary.subject, emails.owner_summary.body);
+      await sendEmail("theronnystack@gmail.com", emails.owner_summary.subject, emails.owner_summary.body);
 
       toast({
         title: "Message sent! ✉️",
@@ -118,7 +118,7 @@ export function ContactSection() {
       console.error("[ContactForm]", err);
       toast({
         title: "Something went wrong",
-        description: "Please try again or email me directly at raunaksh75@gmail.com.",
+        description: "Please try again or email me directly at theronnystack@gmail.com.",
         variant: "destructive",
       });
     } finally {
@@ -164,8 +164,8 @@ export function ContactSection() {
               <div className="space-y-4">
                 <div className="flex items-center gap-6 group">
                   <span className="material-symbols-outlined text-[#8D1515] text-2xl group-hover:scale-110 transition-transform">mail</span>
-                  <a href="mailto:raunaksh75@gmail.com" className="text-xl font-bold text-[#FFB3AE] hover:text-[#8D1515] transition-colors" style={{ fontFamily: "'Epilogue', sans-serif" }}>
-                    raunaksh75@gmail.com
+                  <a href="mailto:theronnystack@gmail.com" className="text-xl font-bold text-[#FFB3AE] hover:text-[#8D1515] transition-colors" style={{ fontFamily: "'Epilogue', sans-serif" }}>
+                    theronnystack@gmail.com
                   </a>
                 </div>
                 <div className="flex items-center gap-6">
