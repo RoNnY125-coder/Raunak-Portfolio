@@ -369,12 +369,15 @@ a, button { transition: color 250ms ease, border-color 250ms ease, box-shadow 25
   grid-row: 3;
   display: flex;
   align-items: flex-end;
-  justify-content: space-between;
+  justify-content: flex-end;
   gap: clamp(28px, 8vw, 96px);
   padding: 0 clamp(22px, 6vw, 96px) clamp(16px, 3vh, 28px);
 }
 
 .hero-scroll-cue {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
   display: flex;
   align-items: center;
   gap: 12px;
@@ -697,6 +700,11 @@ a, button { transition: color 250ms ease, border-color 250ms ease, box-shadow 25
     justify-content: center;
     gap: 14px;
     padding-bottom: 18px;
+  }
+
+  .hero-scroll-cue {
+    position: static;
+    transform: none;
   }
 
   .hero-socials {
