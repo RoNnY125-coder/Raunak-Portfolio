@@ -21,17 +21,73 @@ const certifications = [
   { id: "05", name: "AI/ML Fundamentals", platform: "Vityarthi", year: "2026", credential: "https://www.vityarthi.com/certificate/Jl4tEodmAwv6" },
   { id: "06", name: "Vibe with India Hackathon", platform: "Unstop", year: "2026", credential: "/vibe-with-india-hackathon-certificate.pdf" },
   { id: "07", name: "Treasure Hunt", platform: "VIT Bhopal", year: "2026", credential: "/treasure-hunt-certificate.png" },
+  { id: "08", name: "UX Club Hackathon Judge", platform: "UX Design Club · VIT Bhopal", year: "2025", credential: "/ux-club-hackathon-judge-certificate.png" },
 ];
 
 const BG_COLORS = ['#1e1818', '#211a1a', '#251e1e', '#2a2020', '#1e1818'];
 
 const REPO_PREVIEWS: Record<string, { image: string; position?: string }> = {
+  nudge: { image: '/work/nudge.png', position: 'center' },
+  overclock: { image: '/work/overclock.png', position: 'center top' },
+  'team-nyx---moksh-berawala': { image: '/work/overclock.png', position: 'center top' },
   campusmind: { image: '/work/campusmind.png', position: 'center' },
   'e-commerce-dashboard': { image: '/work/commerce-pro.png', position: 'left top' },
   'task-management-app': { image: '/work/taskflow.png', position: 'center top' },
   stackaudit: { image: '/work/stack-audit.png', position: 'center top' },
   'matdan-ai': { image: '/work/matdan-ai.png', position: 'center top' },
 };
+
+const CURATED_REPOS: GitHubRepo[] = [
+  {
+    id: 9991,
+    name: "Nudge",
+    description: "A calm wellness check-in app designed to track emotional well-being, daily reflections, and mindfulness.",
+    html_url: "https://github.com/RoNnY125-coder/Nudge",
+    language: "TypeScript"
+  },
+  {
+    id: 9992,
+    name: "Overclock",
+    description: "A gamified personal finance management app featuring Athena AI, XP leveling, active quests, and vaults.",
+    html_url: "https://github.com/NAM-tiw-am/Team-NyX---Moksh-berawala",
+    language: "TypeScript"
+  },
+  {
+    id: 9993,
+    name: "CampusMind",
+    description: "An AI-powered academic assistant designed to streamline student workflow.",
+    html_url: "https://github.com/RoNnY125-coder/CampusMind",
+    language: "TypeScript"
+  },
+  {
+    id: 9994,
+    name: "Matdan-Ai",
+    description: "A civic education guide that explains India's election process with an AI-assisted chat flow.",
+    html_url: "https://github.com/RoNnY125-coder/Matdan-Ai",
+    language: "JavaScript"
+  },
+  {
+    id: 9995,
+    name: "StackAudit",
+    description: "A clean AI subscription audit tool that helps founders spot overlapping tools and wasted spend.",
+    html_url: "https://github.com/RoNnY125-coder/StackAudit",
+    language: "TypeScript"
+  },
+  {
+    id: 9996,
+    name: "E-commerce-Dashboard",
+    description: "A modern, responsive admin interface built with React, Tailwind CSS, Chart.js, and Supabase.",
+    html_url: "https://github.com/RoNnY125-coder/E-commerce-Dashboard",
+    language: "TypeScript"
+  },
+  {
+    id: 9997,
+    name: "Task-Management-App",
+    description: "A modern collaborative task management app with drag-and-drop task boards.",
+    html_url: "https://github.com/RoNnY125-coder/Task-Management-App",
+    language: "TypeScript"
+  }
+];
 
 const getRepoPreview = (name: string) => {
   const slug = name.toLowerCase().replace(/[\s_]+/g, '-');
@@ -57,6 +113,14 @@ export function ArchivePanel({ isOpen, onClose }: ArchivePanelProps) {
   useEffect(() => {
     if (!isOpen) return;
     setLoading(true);
+    const mergeRepos = (fetched: GitHubRepo[]) => {
+      const curatedSlugs = new Set(CURATED_REPOS.map(c => c.name.toLowerCase().replace(/[-_\s]+/g, '')));
+      const extraFetched = (Array.isArray(fetched) ? fetched : []).filter(
+        r => !curatedSlugs.has(r.name.toLowerCase().replace(/[-_\s]+/g, ''))
+      );
+      return [...CURATED_REPOS, ...extraFetched];
+    };
+
     fetch("/api/github-projects?username=RoNnY125-coder")
       .then(r => {
         if (!r.ok) {
@@ -67,12 +131,13 @@ export function ArchivePanel({ isOpen, onClose }: ArchivePanelProps) {
         return r.json();
       })
       .then((data: GitHubRepo[]) => { 
-        if (Array.isArray(data)) {
-          setRepos(data); 
-        }
+        setRepos(mergeRepos(data));
         setLoading(false); 
       })
-      .catch(() => setLoading(false));
+      .catch(() => {
+        setRepos(CURATED_REPOS);
+        setLoading(false);
+      });
   }, [isOpen]);
 
   // Drag scroll
