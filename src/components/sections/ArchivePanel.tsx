@@ -21,7 +21,8 @@ const certifications = [
   { id: "05", name: "AI/ML Fundamentals", platform: "Vityarthi", year: "2026", credential: "https://www.vityarthi.com/certificate/Jl4tEodmAwv6" },
   { id: "06", name: "Vibe with India Hackathon", platform: "Unstop", year: "2026", credential: "/vibe-with-india-hackathon-certificate.pdf" },
   { id: "07", name: "Treasure Hunt", platform: "VIT Bhopal", year: "2026", credential: "/treasure-hunt-certificate.png" },
-  { id: "08", name: "UX Club Hackathon Judge", platform: "UX Design Club · VIT Bhopal", year: "2025", credential: "/ux-club-hackathon-judge-certificate.png" },
+  { id: "08", name: "UX Club Hackathon Judge", platform: "UX Design Club · VIT Bhopal", year: "2026", credential: "/ux-club-hackathon-judge-certificate.png" },
+  { id: "09", name: "DesignVerse 2026", platform: "Unstop · VIT Bhopal", year: "2026", credential: "/designverse-2026-certificate.png" },
 ];
 
 const BG_COLORS = ['#1e1818', '#211a1a', '#251e1e', '#2a2020', '#1e1818'];

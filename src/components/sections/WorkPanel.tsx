@@ -110,12 +110,12 @@ export const WorkPanel: React.FC<WorkPanelProps> = ({ onNavigate }) => {
   // Abstract grid mapping classes for indices 0 to 4
   const getGridClasses = (i: number) => {
     switch(i) {
-      case 0: return "col-span-12 md:col-span-8 md:row-span-2 min-h-[300px] md:min-h-[500px]"; // Massive feature block
-      case 1: return "col-span-12 md:col-span-4 min-h-[250px]"; // Top right thin block
-      case 2: return "col-span-12 md:col-span-4 md:row-span-2 min-h-[300px] md:min-h-[500px]"; // Right tall vertical block
-      case 3: return "col-span-12 md:col-span-4 min-h-[250px]"; // Bottom left box
-      case 4: return "col-span-12 md:col-span-4 min-h-[250px]"; // Bottom middle box
-      default: return "col-span-12 md:col-span-4 min-h-[250px]";
+      case 0: return "col-span-12 md:col-span-8 md:row-span-2 min-h-[300px] md:min-h-[500px]"; // Massive feature block (01 Nudge)
+      case 1: return "col-span-12 md:col-span-4 min-h-[240px]"; // Top right block (02 Overclock)
+      case 2: return "col-span-12 md:col-span-4 min-h-[240px]"; // Mid right block (03 CampusMind)
+      case 3: return "col-span-12 md:col-span-6 min-h-[260px]"; // Bottom left box (04 Matdan AI)
+      case 4: return "col-span-12 md:col-span-6 min-h-[260px]"; // Bottom right box (05 Stack Audit - LAST)
+      default: return "col-span-12 md:col-span-6 min-h-[260px]";
     }
   };
 
@@ -188,7 +188,7 @@ export const WorkPanel: React.FC<WorkPanelProps> = ({ onNavigate }) => {
                           top: i === 0 ? 28 : 18,
                           left: i === 0 ? 28 : 18,
                           right: i === 0 ? 28 : 18,
-                          height: i === 0 ? '58%' : i === 2 ? '62%' : '48%',
+                          height: i === 0 ? '58%' : '46%',
                           zIndex: isHovered ? 2 : 1,
                           transform: isHovered ? 'translateY(-6px) scale(1.02)' : 'translateY(0) scale(1)',
                           borderColor: isHovered ? 'rgba(255,179,174,0.32)' : 'rgba(255,255,255,0.08)',
@@ -220,9 +220,9 @@ export const WorkPanel: React.FC<WorkPanelProps> = ({ onNavigate }) => {
 
                     {/* Ghost number */}
                     <span style={{
-                      position: 'absolute', top: hasPreview ? (i === 0 ? '18%' : '12%') : 'auto', bottom: hasPreview ? 'auto' : '-8px', right: '12px',
+                      position: 'absolute', top: hasPreview ? (i === 0 ? '18%' : '10%') : 'auto', bottom: hasPreview ? 'auto' : '-8px', right: '12px',
                       fontFamily: "'Epilogue', sans-serif", fontWeight: 900,
-                      fontSize: i === 0 ? '12rem' : i === 2 ? '8rem' : '6rem',
+                      fontSize: i === 0 ? '12rem' : '6rem',
                       color: hasPreview ? (isHovered ? 'rgba(255,179,174,0.08)' : 'rgba(255,179,174,0.18)') : '#251e1e',
                       lineHeight: 1, pointerEvents: 'none', userSelect: 'none',
                       transition: 'color 420ms cubic-bezier(0.16,1,0.3,1), transform 520ms cubic-bezier(0.16,1,0.3,1), opacity 420ms',

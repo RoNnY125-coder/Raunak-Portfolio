@@ -9,11 +9,12 @@ const certifications = [
   { id: "05", name: "Fundamentals in AI ML", platform: "Vityarthi", year: "2026", credential: "https://www.vityarthi.com/certificate/Jl4tEodmAwv6" },
   { id: "06", name: "Vibe with India Hackathon", platform: "Unstop", year: "2026", credential: "/vibe-with-india-hackathon-certificate.pdf" },
   { id: "07", name: "Treasure Hunt", platform: "VIT Bhopal", year: "2026", credential: "/treasure-hunt-certificate.png" },
-  { id: "08", name: "UX Club Hackathon Judge", platform: "UX Design Club · VIT Bhopal", year: "2025", credential: "/ux-club-hackathon-judge-certificate.png" },
+  { id: "08", name: "UX Club Hackathon Judge", platform: "UX Design Club · VIT Bhopal", year: "2026", credential: "/ux-club-hackathon-judge-certificate.png" },
+  { id: "09", name: "DesignVerse 2026", platform: "Unstop · VIT Bhopal", year: "2026", credential: "/designverse-2026-certificate.png" },
 ];
 
 const colSpans = [
-  "md:col-span-6", "md:col-span-6",
+  "md:col-span-4", "md:col-span-4", "md:col-span-4",
   "md:col-span-4", "md:col-span-4", "md:col-span-4",
   "md:col-span-4", "md:col-span-4", "md:col-span-4",
 ];
@@ -45,7 +46,7 @@ export function CertificationsSection() {
         </div>
         <span className="font-bold text-[#c6c6c7] text-lg hidden md:block"
           style={{ fontFamily: "'Epilogue', sans-serif" }}>
-          01 — 08
+          01 — 09
         </span>
       </motion.div>
 
