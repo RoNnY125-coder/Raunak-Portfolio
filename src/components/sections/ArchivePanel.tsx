@@ -23,6 +23,7 @@ const certifications = [
   { id: "07", name: "Treasure Hunt", platform: "VIT Bhopal", year: "2026", credential: "/treasure-hunt-certificate.png" },
   { id: "08", name: "UX Club Hackathon Judge", platform: "UX Design Club · VIT Bhopal", year: "2026", credential: "/ux-club-hackathon-judge-certificate.png" },
   { id: "09", name: "DesignVerse 2026", platform: "Unstop · VIT Bhopal", year: "2026", credential: "/designverse-2026-certificate.png" },
+  { id: "10", name: "Pixels to Products", platform: "HackIndia · Cloudinary AI", year: "2026", credential: "/hackindia-cloudinary-hackathon-certificate.png" },
 ];
 
 const BG_COLORS = ['#1e1818', '#211a1a', '#251e1e', '#2a2020', '#1e1818'];
@@ -32,10 +33,16 @@ const REPO_PREVIEWS: Record<string, { image: string; position?: string }> = {
   overclock: { image: '/work/overclock.png', position: 'center top' },
   'team-nyx---moksh-berawala': { image: '/work/overclock.png', position: 'center top' },
   campusmind: { image: '/work/campusmind.png', position: 'center' },
+  listinglab: { image: '/work/listinglab.png', position: 'center top' },
   'e-commerce-dashboard': { image: '/work/commerce-pro.png', position: 'left top' },
   'task-management-app': { image: '/work/taskflow.png', position: 'center top' },
   stackaudit: { image: '/work/stack-audit.png', position: 'center top' },
   'matdan-ai': { image: '/work/matdan-ai.png', position: 'center top' },
+  'ai-resume-analyzer': { image: '/work/ai-resume-analyzer.png', position: 'center top' },
+  paytrace: { image: '/work/paytrace.png', position: 'center top' },
+  gmt: { image: '/work/gmt.png', position: 'center top' },
+  trace: { image: '/work/trace.png', position: 'center top' },
+  theronnystack: { image: '/work/theronnystack.png', position: 'center top' },
 };
 
 const CURATED_REPOS: GitHubRepo[] = [
@@ -62,10 +69,10 @@ const CURATED_REPOS: GitHubRepo[] = [
   },
   {
     id: 9994,
-    name: "Matdan-Ai",
-    description: "A civic education guide that explains India's election process with an AI-assisted chat flow.",
-    html_url: "https://github.com/RoNnY125-coder/Matdan-Ai",
-    language: "JavaScript"
+    name: "ListingLab",
+    description: "An AI-powered commercial photography engine turning raw product photos into marketplace-ready listings.",
+    html_url: "https://github.com/RoNnY125-coder/ListingLab",
+    language: "TypeScript"
   },
   {
     id: 9995,
@@ -76,16 +83,58 @@ const CURATED_REPOS: GitHubRepo[] = [
   },
   {
     id: 9996,
+    name: "Matdan-Ai",
+    description: "A civic education guide that explains India's election process with an AI-assisted chat flow.",
+    html_url: "https://github.com/RoNnY125-coder/Matdan-Ai",
+    language: "JavaScript"
+  },
+  {
+    id: 9997,
     name: "E-commerce-Dashboard",
     description: "A modern, responsive admin interface built with React, Tailwind CSS, Chart.js, and Supabase.",
     html_url: "https://github.com/RoNnY125-coder/E-commerce-Dashboard",
     language: "TypeScript"
   },
   {
-    id: 9997,
+    id: 9998,
     name: "Task-Management-App",
     description: "A modern collaborative task management app with drag-and-drop task boards.",
     html_url: "https://github.com/RoNnY125-coder/Task-Management-App",
+    language: "TypeScript"
+  },
+  {
+    id: 9999,
+    name: "AI-Resume-Analyzer",
+    description: "A smart AI tool that parses resumes, evaluates skills, and provides insights for recruiters and candidates.",
+    html_url: "https://github.com/RoNnY125-coder/AI-Resume-Analyzer",
+    language: "TypeScript"
+  },
+  {
+    id: 10000,
+    name: "PayTrace",
+    description: "Real-time payment analytics and transaction verification system.",
+    html_url: "https://github.com/RoNnY125-coder/PayTrace",
+    language: "TypeScript"
+  },
+  {
+    id: 10001,
+    name: "GMT",
+    description: "Global monitoring and tracking web utility platform.",
+    html_url: "https://github.com/RoNnY125-coder/GMT",
+    language: "TypeScript"
+  },
+  {
+    id: 10002,
+    name: "Trace",
+    description: "Interactive visualization tool for tracing flows, journeys, and states.",
+    html_url: "https://github.com/RoNnY125-coder/Trace",
+    language: "TypeScript"
+  },
+  {
+    id: 10003,
+    name: "TheRonnyStack",
+    description: "Full-stack developer template and microservices boilerplate.",
+    html_url: "https://github.com/RoNnY125-coder/TheRonnyStack",
     language: "TypeScript"
   }
 ];
