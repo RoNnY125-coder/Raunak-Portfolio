@@ -66,7 +66,7 @@ const STATIC_REPOS: Repo[] = [
       stargazers_count: 0,
       homepage: "https://listing-lab.vercel.app",
       previewImage: "/work/listinglab.png",
-      previewPosition: "center top",
+      previewPosition: "center",
     },
     {
       id: 1205102108,

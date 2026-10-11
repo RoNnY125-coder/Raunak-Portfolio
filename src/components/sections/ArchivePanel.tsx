@@ -33,7 +33,7 @@ const REPO_PREVIEWS: Record<string, { image: string; position?: string }> = {
   overclock: { image: '/work/overclock.png', position: 'center top' },
   'team-nyx---moksh-berawala': { image: '/work/overclock.png', position: 'center top' },
   campusmind: { image: '/work/campusmind.png', position: 'center' },
-  listinglab: { image: '/work/listinglab.png', position: 'center top' },
+  listinglab: { image: '/work/listinglab.png', position: 'center' },
   'e-commerce-dashboard': { image: '/work/commerce-pro.png', position: 'left top' },
   'task-management-app': { image: '/work/taskflow.png', position: 'center top' },
   stackaudit: { image: '/work/stack-audit.png', position: 'center top' },
